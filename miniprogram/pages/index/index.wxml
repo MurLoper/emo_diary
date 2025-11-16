@@ -1,0 +1,103 @@
+<!--pages/index/index.wxml-->
+<scroll-view class="container" scroll-y style="background: {{cssVars['--theme-background']}};">
+  <!-- 头部 -->
+  <view class="header" style="background: {{cssVars['--theme-surface']}};">
+    <view class="header-title">心晴日记</view>
+    <view class="header-subtitle" style="color: {{cssVars['--theme-text-secondary']}};">记录生活，感受美好</view>
+  </view>
+
+  <!-- Banner轮播 -->
+  <view class="banner-section">
+    <swiper class="banner-swiper" indicator-dots="{{true}}" indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#FFFFFF" autoplay="{{true}}" interval="{{5000}}" circular="{{true}}" bindchange="onBannerChange">
+      <swiper-item wx:for="{{banners}}" wx:key="id">
+        <view class="banner-item" style="background: {{cssVars['--theme-surface']}};">
+          <image class="banner-image" src="{{item.image}}" mode="aspectFill" />
+          <view class="banner-overlay">
+            <view class="banner-title">{{item.title}}</view>
+            <view class="banner-subtitle">{{item.subtitle}}</view>
+          </view>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 主题商店快捷入口 -->
+  <view class="theme-entry" bindtap="navigateToTheme">
+    <view class="theme-entry-card" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-primary']}}10 100%);">
+      <view class="theme-entry-left">
+        <view class="theme-icon-wrapper" style="background: {{cssVars['--theme-primary']}}20;">
+          <image class="theme-icon" src="{{icons.palette}}" mode="aspectFit" style="width: 48rpx; height: 48rpx;" />
+        </view>
+        <view class="theme-entry-info">
+          <view class="theme-entry-points">
+            <text class="points-value">{{userPoints}}</text>
+            <text class="points-label"> 积分</text>
+            <text class="continuous-badge" style="background: {{cssVars['--theme-accent']}}20; color: {{cssVars['--theme-accent']}};">连签{{continuousDays}}天</text>
+          </view>
+          <view class="theme-entry-desc" style="color: {{cssVars['--theme-text-secondary']}};">主题商店 · 解锁更多精美主题</view>
+        </view>
+      </view>
+      <text class="arrow-icon" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+    </view>
+  </view>
+
+  <!-- 快捷功能 -->
+  <view class="quick-actions">
+    <view class="section-title">快捷功能</view>
+    <view class="action-grid">
+      <view class="action-card" bindtap="navigateToCreate">
+        <view class="action-card-inner" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-primary']}}08 100%);">
+          <view class="action-icon-circle" style="background: {{cssVars['--theme-primary']}}20; color: {{cssVars['--theme-primary']}};">
+            <image src="{{icons.bookOpen}}" mode="aspectFit" style="width: 40rpx; height: 40rpx;" />
+          </view>
+          <view class="action-title">写日记</view>
+          <view class="action-desc" style="color: {{cssVars['--theme-text-secondary']}};">已有{{diaryCount}}篇日记</view>
+        </view>
+      </view>
+      <view class="action-card" bindtap="navigateToAlbum">
+        <view class="action-card-inner" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-secondary']}}08 100%);">
+          <view class="action-icon-circle" style="background: {{cssVars['--theme-secondary']}}20; color: {{cssVars['--theme-secondary']}};">
+            <image src="{{icons.image}}" mode="aspectFit" style="width: 40rpx; height: 40rpx;" />
+          </view>
+          <view class="action-title">创建图文集</view>
+          <view class="action-desc" style="color: {{cssVars['--theme-text-secondary']}};">已创建{{albumCount}}个图文集</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近日记 -->
+  <view class="recent-diaries" wx:if="{{recentDiaries.length > 0}}">
+    <view class="section-header">
+      <view class="section-title">最近日记</view>
+      <view class="see-all" style="color: {{cssVars['--theme-text-secondary']}};" bindtap="navigateToDiaryList">查看全部</view>
+    </view>
+    <view class="diary-list">
+      <view class="diary-card" wx:for="{{recentDiaries}}" wx:key="_id" bindtap="navigateToDiaryDetail" data-id="{{item._id}}">
+        <view class="diary-card-inner" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-secondary']}}08 100%);">
+          <view class="diary-content">
+            <image wx:if="{{item.images && item.images.length > 0}}" class="diary-thumb" src="{{item.images[0]}}" mode="aspectFill" />
+            <view class="diary-text">
+              <view class="diary-title">{{item.title}}</view>
+              <view class="diary-excerpt" style="color: {{cssVars['--theme-text-secondary']}};">{{item.content}}</view>
+              <view class="diary-tags">
+                <text class="diary-tag" wx:for="{{item.tags}}" wx:key="index" wx:for-item="tag" style="background: {{cssVars['--theme-primary']}}20; color: {{cssVars['--theme-primary']}};">{{tag}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{recentDiaries.length === 0}}">
+    <view class="empty-icon" style="background: {{cssVars['--theme-primary']}}20;">
+      <image src="{{icons.bookOpen}}" mode="aspectFit" style="width: 96rpx; height: 96rpx;" />
+    </view>
+    <view class="empty-text" style="color: {{cssVars['--theme-text-secondary']}};">还没有日记哦，快去创建吧！</view>
+    <view class="empty-btn" style="background: {{cssVars['--theme-primary']}}; color: #FFFFFF;" bindtap="navigateToCreate">
+      开始写日记
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图标批量下载工具 - 分批下载版</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .warning {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      color: #856404;
+    }
+
+    .warning strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .batch-selector {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .batch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .batch-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid #e0e0e0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .batch-card:hover {
+      border-color: #FF6B9D;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .batch-card.active {
+      border-color: #FF6B9D;
+      background: #FFF5F8;
+    }
+
+    .batch-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .batch-info {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #FF6B9D;
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover {
+      background: #ff5a8d;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+    }
+
+    .btn-primary:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .status {
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status.info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .status.warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background: #e0e0e0;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FF6B9D, #8B7BFF);
+      transition: width 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .tips {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #1565c0;
+    }
+
+    .tips ul {
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+
+    .tips li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 图标批量下载工具 - 分批下载版</h1>
+    <p class="subtitle">推荐方式：分批下载，避免浏览器阻止</p>
+
+    <div class="warning">
+      <strong>⚠️ 浏览器限制说明</strong>
+      浏览器会阻止一次性下载大量文件。建议分批下载，每批约200-400个文件。
+    </div>
+
+    <div class="batch-selector">
+      <h3 style="margin-bottom: 15px;">选择要下载的主题批次:</h3>
+      <div class="batch-grid" id="batch-grid"></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-primary" id="download-btn" onclick="downloadSelectedBatch()">
+        📥 下载选中的批次
+      </button>
+    </div>
+
+    <div id="status" class="status">
+      <div id="status-text"></div>
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill">0%</div>
+      </div>
+    </div>
+
+    <div class="tips">
+      <strong>💡 使用提示:</strong>
+      <ul>
+        <li>每次选择1-2个批次进行下载</li>
+        <li>下载完成后，等待几秒再下载下一批</li>
+        <li>如果浏览器弹出下载确认，请点击"允许"</li>
+        <li>所有批次下载完成后，运行: <code>node scripts/organizeIconsByColor.js</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // 46个图标列表
+    const ICONS = [
+      'arrow-left', 'arrow-right', 'arrow-up', 'award', 'bell', 'book-open',
+      'calendar', 'check', 'chevron-down', 'chevron-left', 'chevron-right',
+      'clock', 'cloud', 'code', 'coins', 'credit-card', 'crown', 'download',
+      'eye', 'eye-off', 'filter', 'gift', 'heart', 'help-circle', 'home',
+      'image', 'lock', 'mail', 'maximize-2', 'palette', 'phone', 'plus',
+      'printer', 'save', 'search', 'settings', 'share-2', 'shield',
+      'smartphone', 'sparkles', 'star', 'tag', 'trending-up', 'user', 'x', 'zap'
+    ];
+
+    // 主题批次配置
+    const THEME_BATCHES = [
+      {
+        id: 'free-1',
+        name: '免费主题 (批次1)',
+        type: '免费 - 4个主题',
+        themes: {
+          "pink-girl": { name: "粉色少女", colors: { primary: "#FFB6C1", secondary: "#FFC0CB", accent: "#FF69B4", white: "#FFFFFF" }},
+          "green-fresh": { name: "绿意盎然", colors: { primary: "#4CAF50", secondary: "#8BC34A", accent: "#81C784", white: "#FFFFFF" }},
+          "dark-mode": { name: "暗夜星辰", colors: { primary: "#BB86FC", secondary: "#03DAC6", accent: "#CF6679", white: "#FFFFFF" }},
+          "lavender-dream": { name: "薰衣草梦境", colors: { primary: "#9B7EBD", secondary: "#D4A5E0", accent: "#B695C0", white: "#FFFFFF" }}
+        }
+      },
+      {
+        id: 'free-2',
+        name: '免费主题 (批次2)',
+        type: '免费 - 4个主题',
+        themes: {
+          "coral-beach": { name: "珊瑚海滩", colors: { primary: "#FF7F7F", secondary: "#FFB3B3", accent: "#FF6B6B", white: "#FFFFFF" }},
+          "mint-fresh": { name: "薄荷清新", colors: { primary: "#5DD39E", secondary: "#BCE5D6", accent: "#3FB67E", white: "#FFFFFF" }},
+          "sky-blue": { name: "天空之蓝", colors: { primary: "#4FC3F7", secondary: "#81D4FA", accent: "#29B6F6", white: "#FFFFFF" }},
+          "peach-blossom": { name: "桃花粉嫩", colors: { primary: "#FFAB91", secondary: "#FFCCBC", accent: "#FF8A65", white: "#FFFFFF" }}
+        }
+      },
+      {
+        id: 'signin',
+        name: '签到解锁主题',
+        type: '签到 - 3个主题',
+        themes: {
+          "cherry-blossom": { name: "樱花季节", colors: { primary: "#FFB7C5", secondary: "#FFC9D9", accent: "#FF9EB1", white: "#FFFFFF" }},
+          "autumn-maple": { name: "秋日枫叶", colors: { primary: "#E67E22", secondary: "#F39C12", accent: "#D35400", white: "#FFFFFF" }},
+          "winter-snow": { name: "冬日雪境", colors: { primary: "#B0C4DE", secondary: "#ADD8E6", accent: "#87CEEB", white: "#FFFFFF" }}
+        }
+      },
+      {
+        id: 'points-1',
+        name: '积分解锁主题 (批次1)',
+        type: '积分 - 2个主题',
+        themes: {
+          "starry-sky": { name: "璀璨星空", colors: { primary: "#4A90E2", secondary: "#7B68EE", accent: "#00BFFF", white: "#FFFFFF" }},
+          "golden-sunset": { name: "金色余晖", colors: { primary: "#FFB74D", secondary: "#FFA726", accent: "#FF9800", white: "#FFFFFF" }}
+        }
+      },
+      {
+        id: 'points-2',
+        name: '积分解锁主题 (批次2)',
+        type: '积分 - 2个主题',
+        themes: {
+          "klein-blue": { name: "克莱因蓝", colors: { primary: "#002FA7", secondary: "#0047AB", accent: "#4169E1", white: "#FFFFFF" }},
+          "rose-gold": { name: "玫瑰金", colors: { primary: "#E8A0A0", secondary: "#F5C6C6", accent: "#D87093", white: "#FFFFFF" }}
+        }
+      },
+      {
+        id: 'premium',
+        name: '高级主题',
+        type: '高级 - 2个主题',
+        themes: {
+          "aurora": { name: "极光幻境", colors: { primary: "#00D9FF", secondary: "#7B2FFF", accent: "#FF1744", white: "#FFFFFF" }},
+          "galaxy": { name: "银河星系", colors: { primary: "#9D50BB", secondary: "#6E48AA", accent: "#FF6B9D", white: "#FFFFFF" }}
+        }
+      }
+    ];
+
+    let selectedBatchId = null;
+
+    function initBatches() {
+      const grid = document.getElementById('batch-grid');
+
+      THEME_BATCHES.forEach(batch => {
+        const card = document.createElement('div');
+        card.className = 'batch-card';
+        card.onclick = () => selectBatch(batch.id, card);
+
+        const themeCount = Object.keys(batch.themes).length;
+        const colorCount = themeCount * 4; // 每个主题4个颜色变体
+        const fileCount = ICONS.length * colorCount;
+
+        card.innerHTML = `
+          <div class="batch-name">${batch.name}</div>
+          <div class="batch-info">${batch.type}</div>
+          <div class="batch-info" style="margin-top: 5px;">
+            ${fileCount} 个文件 (${ICONS.length} 图标 × ${colorCount} 颜色)
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function selectBatch(batchId, card) {
+      // 取消之前的选中
+      document.querySelectorAll('.batch-card').forEach(c => c.classList.remove('active'));
+
+      // 选中当前批次
+      card.classList.add('active');
+      selectedBatchId = batchId;
+
+      document.getElementById('download-btn').disabled = false;
+    }
+
+    function showStatus(text, type = 'info') {
+      const status = document.getElementById('status');
+      const statusText = document.getElementById('status-text');
+      status.className = `status show ${type}`;
+      statusText.textContent = text;
+    }
+
+    function updateProgress(completed, total) {
+      const percentage = Math.round((completed / total) * 100);
+      const fill = document.getElementById('progress-fill');
+      fill.style.width = `${percentage}%`;
+      fill.textContent = `${completed}/${total} (${percentage}%)`;
+    }
+
+    async function downloadSelectedBatch() {
+      if (!selectedBatchId) {
+        alert('请先选择一个批次！');
+        return;
+      }
+
+      const batch = THEME_BATCHES.find(b => b.id === selectedBatchId);
+      const btn = document.getElementById('download-btn');
+
+      btn.disabled = true;
+      btn.textContent = '⏳ 下载中...';
+
+      // 收集所有颜色
+      const colors = new Set();
+      Object.values(batch.themes).forEach(theme => {
+        Object.values(theme.colors).forEach(color => {
+          colors.add(color);
+        });
+      });
+
+      const total = ICONS.length * colors.size;
+      showStatus(`正在生成 ${batch.name} 的图标 (${total} 个文件)...`, 'info');
+
+      let completed = 0;
+      updateProgress(0, total);
+
+      for (const colorHex of colors) {
+        for (const iconName of ICONS) {
+          try {
+            await downloadIcon(iconName, colorHex);
+            completed++;
+            updateProgress(completed, total);
+
+            // 延迟150ms，避免浏览器阻止
+            await new Promise(resolve => setTimeout(resolve, 150));
+          } catch (error) {
+            console.error(`Failed to download ${iconName} (${colorHex}):`, error);
+          }
+        }
+      }
+
+      showStatus(`✅ ${batch.name} 下载完成！已生成 ${total} 个文件`, 'success');
+      btn.disabled = false;
+      btn.textContent = '📥 下载选中的批次';
+
+      setTimeout(() => {
+        showStatus('💡 提示：可以继续下载其他批次，或运行 node scripts/organizeIconsByColor.js 整理文件', 'info');
+      }, 2000);
+    }
+
+    async function downloadIcon(iconName, colorHex) {
+      const iconElement = document.querySelector(`[data-lucide="${iconName}"]`);
+      if (!iconElement) {
+        throw new Error(`Icon ${iconName} not found`);
+      }
+
+      const svg = iconElement.cloneNode(true);
+      svg.setAttribute('width', '48');
+      svg.setAttribute('height', '48');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+      svg.querySelectorAll('*').forEach(el => {
+        if (el.hasAttribute('stroke')) {
+          el.setAttribute('stroke', colorHex);
+        }
+        if (el.hasAttribute('fill') && el.getAttribute('fill') !== 'none') {
+          el.setAttribute('fill', colorHex);
+        }
+      });
+
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement('canvas');
+      canvas.width = 48;
+      canvas.height = 48;
+      const ctx = canvas.getContext('2d');
+
+      const img = new Image();
+      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+
+      return new Promise((resolve, reject) => {
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0);
+          URL.revokeObjectURL(url);
+
+          canvas.toBlob((blob) => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            const colorCode = colorHex.replace('#', '').toLowerCase();
+            a.download = `${colorCode}__${iconName}.png`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+            resolve();
+          }, 'image/png');
+        };
+        img.onerror = reject;
+        img.src = url;
+      });
+    }
+
+    // 初始化
+    initBatches();
+
+    // 加载 Lucide 图标
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/lucide@latest';
+    script.onload = () => {
+      // 创建隐藏的图标元素
+      const iconContainer = document.createElement('div');
+      iconContainer.style.display = 'none';
+      iconContainer.id = 'icon-templates';
+
+      ICONS.forEach(iconName => {
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', iconName);
+        iconContainer.appendChild(icon);
+      });
+
+      document.body.appendChild(iconContainer);
+      lucide.createIcons();
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+</html>

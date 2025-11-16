@@ -1,0 +1,122 @@
+<!--pages/diary/list/list.wxml-->
+<scroll-view class="container" scroll-y scroll-into-view="{{scrollIntoView}}" bindscroll="onScroll" style="background: {{cssVars['--theme-background']}};">
+  <!-- 头部 - 固定 -->
+  <view class="header" style="background: {{cssVars['--theme-surface']}}F0;">
+    <view class="header-title" style="color: {{cssVars['--theme-text-primary']}};">我的日记</view>
+
+    <!-- 搜索框 -->
+    <view class="search-box" style="background: {{cssVars['--theme-background']}};">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: {{cssVars['--theme-text-secondary']}};">
+        <circle cx="11" cy="11" r="8" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="m21 21-4.35-4.35" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <input
+        class="search-input"
+        placeholder="搜索日记..."
+        value="{{searchText}}"
+        bindinput="onSearchInput"
+        style="color: {{cssVars['--theme-text-primary']}};"
+      />
+      <svg wx:if="{{searchText}}" class="clear-icon" bindtap="clearSearch" width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6 6 18M6 6l12 12" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </view>
+
+    <!-- 标签筛选 -->
+    <scroll-view class="tag-filter" scroll-x>
+      <view
+        wx:for="{{allTags}}"
+        wx:key="*this"
+        class="tag-item"
+        bindtap="onTagSelect"
+        data-tag="{{item}}"
+        style="background: {{selectedTag === item ? cssVars['--theme-primary'] : cssVars['--theme-surface']}}; color: {{selectedTag === item ? '#FFFFFF' : cssVars['--theme-text-primary']}};"
+      >
+        {{item}}
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 日记列表 -->
+  <view class="diary-list">
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{filteredDiaries.length === 0 && !loading}}">
+      <view class="empty-icon" style="background: {{cssVars['--theme-primary']}}20;">
+        <svg width="64" height="64" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="16" y1="2" x2="16" y2="6" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="8" y1="2" x2="8" y2="6" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="3" y1="10" x2="21" y2="10" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </view>
+      <text class="empty-text" style="color: {{cssVars['--theme-text-secondary']}};">还没有日记哦，快去创建吧！</text>
+    </view>
+
+    <!-- 日记卡片 -->
+    <view
+      wx:for="{{filteredDiaries}}"
+      wx:key="_id"
+      class="diary-card"
+      bindtap="onDiaryTap"
+      data-id="{{item._id}}"
+    >
+      <view class="diary-card-inner" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-primary']}}08 100%);">
+        <!-- 日期 -->
+        <view class="diary-header">
+          <text class="diary-date" style="color: {{cssVars['--theme-text-secondary']}};">{{item.date}}</text>
+          <view class="diary-tags-preview">
+            <text
+              wx:for="{{item.tags}}"
+              wx:key="index"
+              wx:for-item="tag"
+              wx:for-index="tagIndex"
+              wx:if="{{tagIndex < 2}}"
+              class="tag-preview"
+              style="background: {{cssVars['--theme-primary']}}15; color: {{cssVars['--theme-primary']}};"
+            >
+              {{tag}}
+            </text>
+          </view>
+        </view>
+
+        <!-- 标题 -->
+        <view class="diary-title">{{item.title}}</view>
+
+        <!-- 内容 -->
+        <view class="diary-content" style="color: {{cssVars['--theme-text-secondary']}};">{{item.content}}</view>
+
+        <!-- 图片网格 -->
+        <view wx:if="{{item.images && item.images.length > 0}}" class="image-grid {{item.images.length === 1 ? 'grid-1' : item.images.length === 2 ? 'grid-2' : 'grid-3'}}">
+          <view
+            wx:for="{{item.images}}"
+            wx:key="index"
+            wx:for-item="image"
+            wx:for-index="imgIndex"
+            wx:if="{{imgIndex < 3}}"
+            class="image-item"
+          >
+            <image class="diary-image" src="{{image}}" mode="aspectFill" />
+            <view wx:if="{{imgIndex === 2 && item.images.length > 3}}" class="image-more">
+              <text>+{{item.images.length - 3}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 返回顶部按钮 -->
+  <view
+    wx:if="{{showBackToTop}}"
+    class="back-to-top"
+    bindtap="scrollToTop"
+    style="background: {{cssVars['--theme-primary']}}; color: #FFFFFF;"
+  >
+    <text>↑</text>
+  </view>
+</scroll-view>
+
+<!-- 加载更多 -->
+<view wx:if="{{loading}}" class="loading">
+  <text style="color: {{cssVars['--theme-text-secondary']}};">加载中...</text>
+</view>

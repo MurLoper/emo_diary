@@ -1,0 +1,16 @@
+{
+  "name": "emotions-diary-miniprogram",
+  "version": "1.0.0",
+  "description": "心晴日记微信小程序",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "diary",
+    "emotions",
+    "miniprogram"
+  ],
+  "author": "",
+  "license": "MIT"
+}

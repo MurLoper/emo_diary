@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./theme-resources:/app/theme-resources
+    restart: always
+    networks:
+      - emotions-diary-network
+
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password123
+      - MONGO_INITDB_DATABASE=emotions-diary
+    volumes:
+      - mongodb_data:/data/db
+    restart: always
+    networks:
+      - emotions-diary-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass redis123
+    volumes:
+      - redis_data:/data
+    restart: always
+    networks:
+      - emotions-diary-network
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    restart: always
+    networks:
+      - emotions-diary-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  emotions-diary-network:
+    driver: bridge

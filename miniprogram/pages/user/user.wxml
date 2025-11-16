@@ -1,0 +1,247 @@
+<!--pages/user/user.wxml-->
+<view class="container" style="background: {{cssVars['--theme-background']}};">
+  <!-- 顶部导航 -->
+  <view class="header" style="background: {{cssVars['--theme-surface']}};">
+    <view class="header-title" style="color: {{cssVars['--theme-text-primary']}};">我的</view>
+
+    <!-- 标签页 -->
+    <view class="tabs" style="border-color: {{cssVars['--theme-border']}};">
+      <view
+        class="tab-item {{activeTab === 'profile' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="profile"
+        style="color: {{activeTab === 'profile' ? cssVars['--theme-primary'] : cssVars['--theme-text-secondary']}};"
+      >
+        <text>个人资料</text>
+        <view
+          wx:if="{{activeTab === 'profile'}}"
+          class="tab-indicator"
+          style="background: {{cssVars['--theme-primary']}};"
+        />
+      </view>
+      <view
+        class="tab-item {{activeTab === 'settings' ? 'active' : ''}}"
+        bindtap="switchTab"
+        data-tab="settings"
+        style="color: {{activeTab === 'settings' ? cssVars['--theme-primary'] : cssVars['--theme-text-secondary']}};"
+      >
+        <text>设置</text>
+        <view
+          wx:if="{{activeTab === 'settings'}}"
+          class="tab-indicator"
+          style="background: {{cssVars['--theme-primary']}};"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <scroll-view class="content" scroll-y>
+    <!-- 个人资料标签页 -->
+    <view wx:if="{{activeTab === 'profile'}}">
+      <!-- 用户信息卡片 -->
+      <view class="profile-section">
+        <view class="user-card" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-primary']}}10 100%);">
+          <view class="user-info">
+            <!-- 头像 -->
+            <view class="avatar-wrapper">
+              <image class="avatar" src="{{userInfo.avatar}}" mode="aspectFill" />
+              <view class="level-badge" style="background: {{cssVars['--theme-primary']}};">
+                {{userInfo.level}}
+              </view>
+            </view>
+
+            <!-- 信息 -->
+            <view class="user-details">
+              <view class="user-name">{{userInfo.name}}</view>
+              <view class="user-join" style="color: {{cssVars['--theme-text-secondary']}};">
+                加入于 {{userInfo.joinDate}}
+              </view>
+            </view>
+
+            <!-- 编辑按钮 -->
+            <view
+              class="edit-button"
+              bindtap="switchTab"
+              data-tab="settings"
+              style="background: {{cssVars['--theme-primary']}}20; color: {{cssVars['--theme-primary']}};"
+            >
+              <svg class="icon" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 我的内容 -->
+      <view class="menu-section">
+        <view class="section-title" style="color: {{cssVars['--theme-text-secondary']}};">
+          我的内容
+        </view>
+        <view class="menu-card" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-secondary']}}08 100%);">
+          <view class="menu-item" bindtap="navigateToDiaryList">
+            <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 19 L4 4 L7 1 L20 1 L20 21 L7 21 L4 18 Z" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 7 L16 7 M8 11 L16 11" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </view>
+            <view class="menu-label">日记</view>
+            <view class="menu-extra">
+              <text class="menu-value" style="color: {{cssVars['--theme-text-secondary']}};">{{diaryCount}}</text>
+              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+            </view>
+          </view>
+          <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
+          <view class="menu-item" bindtap="navigateToThemeStore">
+            <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="8" r="6" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </view>
+            <view class="menu-label">我的主题</view>
+            <view class="menu-extra">
+              <text class="menu-value" style="color: {{cssVars['--theme-text-secondary']}};">{{themeCount}}</text>
+              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 积分中心 -->
+      <view class="menu-section">
+        <view class="section-title" style="color: {{cssVars['--theme-text-secondary']}};">
+          积分中心
+        </view>
+        <view class="menu-card" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-secondary']}}08 100%);">
+          <view class="menu-item" bindtap="navigateToCheckin">
+            <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </view>
+            <view class="menu-label">积分</view>
+            <view class="menu-extra">
+              <text class="menu-value" style="color: {{cssVars['--theme-text-secondary']}};">{{userPoints}}</text>
+              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+            </view>
+          </view>
+          <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
+          <view class="menu-item">
+            <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="8" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14.5 8.5c-.5-1-1.5-1.5-2.5-1.5-2 0-3 1.5-3 3s1 3 3 3 3 1.5 3 3-1 3-3 3c-1 0-2-.5-2.5-1.5M12 3v3m0 12v3" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </view>
+            <view class="menu-label">心晴币</view>
+            <view class="menu-extra">
+              <view class="hot-badge" style="background: {{cssVars['--theme-accent']}}20; color: {{cssVars['--theme-accent']}};">
+                HOT
+              </view>
+              <text class="menu-value" style="color: {{cssVars['--theme-text-secondary']}};">{{userCoins}}</text>
+              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 设置标签页 -->
+    <view wx:if="{{activeTab === 'settings'}}">
+      <!-- 基础设置 -->
+      <view class="menu-section">
+        <view class="section-title" style="color: {{cssVars['--theme-text-secondary']}};">
+          基础设置
+        </view>
+        <view class="menu-card" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-secondary']}}08 100%);">
+          <view class="menu-item">
+            <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="7" r="4" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </view>
+            <view class="menu-label">个人信息</view>
+            <view class="menu-extra">
+              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+            </view>
+          </view>
+          <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
+          <view class="menu-item">
+            <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </view>
+            <view class="menu-label">隐私设置</view>
+            <view class="menu-extra">
+              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+            </view>
+          </view>
+          <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
+          <view class="menu-item">
+            <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </view>
+            <view class="menu-label">消息通知</view>
+            <view class="menu-extra">
+              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 其他选项 -->
+      <view class="menu-section">
+        <view class="section-title" style="color: {{cssVars['--theme-text-secondary']}};">
+          其他选项
+        </view>
+        <view class="menu-card" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-secondary']}}08 100%);">
+          <view class="menu-item">
+            <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </view>
+            <view class="menu-label">帮助中心</view>
+            <view class="menu-extra">
+              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+            </view>
+          </view>
+          <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
+          <view class="menu-item">
+            <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
+              <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 16v-4m0-4h.01" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </view>
+            <view class="menu-label">关于我们</view>
+            <view class="menu-extra">
+              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 退出登录 -->
+      <view class="logout-section">
+        <button class="logout-button" style="background: {{cssVars['--theme-surface']}}; color: {{cssVars['--theme-text-secondary']}};">
+          退出登录
+        </button>
+      </view>
+
+      <!-- 版本信息 -->
+      <view class="version-info" style="color: {{cssVars['--theme-text-secondary']}};">
+        心晴日记 v1.0.0
+      </view>
+    </view>
+  </scroll-view>
+</view>

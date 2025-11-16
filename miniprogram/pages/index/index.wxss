@@ -1,0 +1,324 @@
+/* pages/index/index.wxss */
+
+.container {
+  min-height: 100vh;
+  padding-bottom: 32rpx;
+}
+
+/* 头部 */
+.header {
+  padding: 80rpx 48rpx 48rpx;
+  text-align: center;
+  margin-bottom: 16rpx;
+}
+
+.header-title {
+  font-size: 56rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+}
+
+.header-subtitle {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+/* Banner轮播 */
+.banner-section {
+  padding: 0 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.banner-swiper {
+  width: 100%;
+  height: 384rpx;
+  border-radius: 32rpx;
+  overflow: hidden;
+}
+
+.banner-item {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 32rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+}
+
+.banner-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 48rpx;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.banner-title {
+  color: #FFFFFF;
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.banner-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 28rpx;
+}
+
+/* 主题商店入口 */
+.theme-entry {
+  padding: 0 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.theme-entry-card {
+  padding: 32rpx;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+}
+
+.theme-entry-card:active {
+  transform: scale(0.98);
+}
+
+.theme-entry-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 24rpx;
+}
+
+.theme-icon-wrapper {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-icon {
+  font-size: 48rpx;
+}
+
+.theme-entry-info {
+  flex: 1;
+}
+
+.theme-entry-points {
+  margin-bottom: 8rpx;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.points-value {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.points-label {
+  font-size: 28rpx;
+}
+
+.continuous-badge {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.theme-entry-desc {
+  font-size: 24rpx;
+}
+
+.arrow-icon {
+  font-size: 48rpx;
+  margin-left: 16rpx;
+}
+
+/* 快捷功能 */
+.quick-actions {
+  padding: 0 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 32rpx;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
+}
+
+.action-card {
+  transition: transform 0.2s;
+}
+
+.action-card:active {
+  transform: scale(0.95);
+}
+
+.action-card-inner {
+  padding: 48rpx 32rpx;
+  border-radius: 24rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+}
+
+.action-icon-circle {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 48rpx;
+  margin: 0 auto 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64rpx;
+}
+
+.action-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.action-desc {
+  font-size: 24rpx;
+}
+
+/* 最近日记 */
+.recent-diaries {
+  padding: 0 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+}
+
+.see-all {
+  font-size: 28rpx;
+}
+
+.diary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.diary-card {
+  transition: transform 0.2s;
+}
+
+.diary-card:active {
+  transform: scale(0.98);
+}
+
+.diary-card-inner {
+  padding: 32rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 32rpx rgba(0, 0, 0, 0.08);
+}
+
+.diary-content {
+  display: flex;
+  gap: 24rpx;
+}
+
+.diary-thumb {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+}
+
+.diary-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.diary-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.diary-excerpt {
+  font-size: 26rpx;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.diary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.diary-tag {
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 128rpx 64rpx;
+}
+
+.empty-icon {
+  width: 192rpx;
+  height: 192rpx;
+  border-radius: 96rpx;
+  margin: 0 auto 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  margin-bottom: 32rpx;
+}
+
+.empty-btn {
+  display: inline-block;
+  padding: 24rpx 64rpx;
+  border-radius: 48rpx;
+  font-size: 28rpx;
+  transition: transform 0.2s;
+}
+
+.empty-btn:active {
+  transform: scale(0.95);
+}

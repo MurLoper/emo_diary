@@ -1,0 +1,183 @@
+<!--pages/diary/create/create.wxml-->
+<scroll-view class="container" scroll-y style="background: {{cssVars['--theme-background']}};">
+  <!-- 头部 - 固定 -->
+  <view class="header" style="background: {{cssVars['--theme-surface']}};">
+    <view class="header-content">
+      <view class="header-left" bindtap="onBack">
+        <text class="back-icon">‹</text>
+      </view>
+      <view class="header-title">写日记</view>
+      <view class="header-right">
+        <view
+          class="save-btn {{!canSave ? 'disabled' : ''}}"
+          bindtap="onSave"
+          style="background: {{cssVars['--theme-primary']}}; color: #FFFFFF;"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 3v4a1 1 0 0 0 1 1h7" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 标题输入 -->
+    <view class="title-section">
+      <input
+        class="title-input"
+        placeholder="给这一天起个标题..."
+        value="{{title}}"
+        bindinput="onTitleInput"
+        maxlength="50"
+        style="color: {{cssVars['--theme-text-primary']}};"
+      />
+    </view>
+
+    <!-- 日期 -->
+    <view class="date-section" style="color: {{cssVars['--theme-text-secondary']}};">
+      {{currentDate}}
+    </view>
+
+    <!-- 图片上传 -->
+    <view class="image-section">
+      <view class="section-title">添加照片 ({{images.length}}/9)</view>
+      <view class="image-grid">
+        <view
+          wx:for="{{images}}"
+          wx:key="index"
+          class="image-item"
+        >
+          <image class="uploaded-image" src="{{item}}" mode="aspectFill" />
+          <view class="image-remove" bindtap="onRemoveImage" data-index="{{index}}">
+            <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6 6 18M6 6l12 12" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </view>
+        </view>
+        <view
+          wx:if="{{images.length < 9}}"
+          class="image-upload"
+          bindtap="onChooseImage"
+          style="border-color: {{cssVars['--theme-border']}}; color: {{cssVars['--theme-text-secondary']}};"
+        >
+          <svg class="upload-icon" width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="9" r="2" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <text class="upload-text">添加</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 内容输入 -->
+    <view class="content-section">
+      <textarea
+        class="content-textarea"
+        placeholder="记录此刻的心情..."
+        value="{{content}}"
+        bindinput="onContentInput"
+        maxlength="5000"
+        auto-height
+        style="color: {{cssVars['--theme-text-primary']}};"
+      />
+      <view class="word-count" style="color: {{cssVars['--theme-text-secondary']}};">
+        {{content.length}}/5000
+      </view>
+    </view>
+
+    <!-- AI润色 -->
+    <view
+      class="ai-polish {{!content || aiPolishing ? 'disabled' : ''}}"
+      bindtap="onAIPolish"
+      style="background: {{cssVars['--theme-accent']}}20; color: {{cssVars['--theme-accent']}};"
+    >
+      <svg class="ai-icon" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" stroke="{{cssVars['--theme-accent']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <text>{{aiPolishing ? 'AI润色中...' : 'AI润色 (消耗10积分)'}}</text>
+    </view>
+
+    <!-- 标签选择 -->
+    <view class="tags-section">
+      <view class="section-title">选择标签</view>
+
+      <!-- 心情标签 -->
+      <view class="tag-category">
+        <view class="category-title" style="color: {{cssVars['--theme-text-secondary']}};">心情</view>
+        <view class="tag-list">
+          <view
+            wx:for="{{tagCategories.mood}}"
+            wx:key="*this"
+            class="tag-item"
+            bindtap="onToggleTag"
+            data-tag="{{item}}"
+            style="background: {{selectedTags.includes(item) ? cssVars['--theme-primary'] : cssVars['--theme-surface']}}; color: {{selectedTags.includes(item) ? '#FFFFFF' : cssVars['--theme-text-primary']}}; border-color: {{selectedTags.includes(item) ? cssVars['--theme-primary'] : cssVars['--theme-border']}};"
+          >
+            {{item}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 活动标签 -->
+      <view class="tag-category">
+        <view class="category-title" style="color: {{cssVars['--theme-text-secondary']}};">活动</view>
+        <view class="tag-list">
+          <view
+            wx:for="{{tagCategories.activity}}"
+            wx:key="*this"
+            class="tag-item"
+            bindtap="onToggleTag"
+            data-tag="{{item}}"
+            style="background: {{selectedTags.includes(item) ? cssVars['--theme-primary'] : cssVars['--theme-surface']}}; color: {{selectedTags.includes(item) ? '#FFFFFF' : cssVars['--theme-text-primary']}}; border-color: {{selectedTags.includes(item) ? cssVars['--theme-primary'] : cssVars['--theme-border']}};"
+          >
+            {{item}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 社交标签 -->
+      <view class="tag-category">
+        <view class="category-title" style="color: {{cssVars['--theme-text-secondary']}};">社交</view>
+        <view class="tag-list">
+          <view
+            wx:for="{{tagCategories.social}}"
+            wx:key="*this"
+            class="tag-item"
+            bindtap="onToggleTag"
+            data-tag="{{item}}"
+            style="background: {{selectedTags.includes(item) ? cssVars['--theme-primary'] : cssVars['--theme-surface']}}; color: {{selectedTags.includes(item) ? '#FFFFFF' : cssVars['--theme-text-primary']}}; border-color: {{selectedTags.includes(item) ? cssVars['--theme-primary'] : cssVars['--theme-border']}};"
+          >
+            {{item}}
+          </view>
+        </view>
+      </view>
+
+      <!-- 天气标签 -->
+      <view class="tag-category">
+        <view class="category-title" style="color: {{cssVars['--theme-text-secondary']}};">天气</view>
+        <view class="tag-list">
+          <view
+            wx:for="{{tagCategories.weather}}"
+            wx:key="*this"
+            class="tag-item"
+            bindtap="onToggleTag"
+            data-tag="{{item}}"
+            style="background: {{selectedTags.includes(item) ? cssVars['--theme-primary'] : cssVars['--theme-surface']}}; color: {{selectedTags.includes(item) ? '#FFFFFF' : cssVars['--theme-text-primary']}}; border-color: {{selectedTags.includes(item) ? cssVars['--theme-primary'] : cssVars['--theme-border']}};"
+          >
+            {{item}}
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 草稿提示 -->
+    <view class="draft-tip" style="color: {{cssVars['--theme-text-secondary']}};">
+      内容会自动保存为草稿
+    </view>
+  </view>
+</scroll-view>

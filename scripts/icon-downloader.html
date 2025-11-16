@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lucide 图标下载工具 - 心晴日记</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .colors {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .color-card {
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid #e0e0e0;
+    }
+
+    .color-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-transform: capitalize;
+    }
+
+    .color-preview {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .icon-card {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .icon-card:hover {
+      background: #e9ecef;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .icon-card.selected {
+      border-color: #FF6B9D;
+      background: #FFF5F8;
+    }
+
+    .icon-preview {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 10px;
+    }
+
+    .icon-name {
+      font-size: 12px;
+      color: #666;
+      word-break: break-all;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #FF6B9D;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #ff5a8d;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+    }
+
+    .btn-secondary {
+      background: #8B7BFF;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #7b6bef;
+    }
+
+    .btn-success {
+      background: #10b981;
+      color: white;
+    }
+
+    .status {
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status.info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .progress {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 Lucide 图标下载工具</h1>
+    <p class="subtitle">为心晴日记项目批量生成 PNG 图标</p>
+
+    <div class="colors">
+      <div class="color-card">
+        <div class="color-name">Primary (主色)</div>
+        <div class="color-preview">
+          <div class="color-box" style="background: #FF6B9D;"></div>
+          <span>#FF6B9D</span>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-name">Secondary (次色)</div>
+        <div class="color-preview">
+          <div class="color-box" style="background: #8B7BFF;"></div>
+          <span>#8B7BFF</span>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-name">Accent (强调色)</div>
+        <div class="color-preview">
+          <div class="color-box" style="background: #FFB84D;"></div>
+          <span>#FFB84D</span>
+        </div>
+      </div>
+      <div class="color-card">
+        <div class="color-name">White (白色)</div>
+        <div class="color-preview">
+          <div class="color-box" style="background: #FFFFFF; border: 2px solid #ddd;"></div>
+          <span>#FFFFFF</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-primary" onclick="selectAll()">✓ 全选</button>
+      <button class="btn-secondary" onclick="deselectAll()">✗ 取消全选</button>
+      <button class="btn-success" onclick="downloadAllIcons()">📥 下载所有图标 (4种颜色)</button>
+    </div>
+
+    <div id="icon-grid" class="icon-grid">
+      <!-- Icons will be loaded here -->
+    </div>
+
+    <div id="status" class="status">
+      <div id="status-text"></div>
+      <div id="progress" class="progress"></div>
+    </div>
+  </div>
+
+  <script>
+    const ICONS = [
+      'home', 'palette', 'book-open', 'image', 'save', 'x', 'search', 'calendar',
+      'settings', 'user', 'shield', 'bell', 'help-circle', 'info', 'sparkles',
+      'gift', 'dollar-sign', 'zap', 'crown', 'credit-card', 'trending-up',
+      'check', 'lock', 'award'
+    ];
+
+    const COLORS = {
+      primary: '#FF6B9D',
+      secondary: '#8B7BFF',
+      accent: '#FFB84D',
+      white: '#FFFFFF'
+    };
+
+    const selectedIcons = new Set(ICONS); // 默认全选
+
+    // Load Lucide icons
+    async function loadIcons() {
+      const grid = document.getElementById('icon-grid');
+
+      for (const iconName of ICONS) {
+        const card = document.createElement('div');
+        card.className = 'icon-card selected';
+        card.onclick = () => toggleIcon(iconName, card);
+
+        const preview = document.createElement('div');
+        preview.className = 'icon-preview';
+        preview.innerHTML = `<i data-lucide="${iconName}" style="width: 48px; height: 48px;"></i>`;
+
+        const name = document.createElement('div');
+        name.className = 'icon-name';
+        name.textContent = iconName;
+
+        card.appendChild(preview);
+        card.appendChild(name);
+        grid.appendChild(card);
+      }
+
+      // 加载 Lucide 图标库
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/lucide@latest';
+      script.onload = () => {
+        lucide.createIcons();
+      };
+      document.body.appendChild(script);
+    }
+
+    function toggleIcon(iconName, card) {
+      if (selectedIcons.has(iconName)) {
+        selectedIcons.delete(iconName);
+        card.classList.remove('selected');
+      } else {
+        selectedIcons.add(iconName);
+        card.classList.add('selected');
+      }
+    }
+
+    function selectAll() {
+      selectedIcons.clear();
+      ICONS.forEach(icon => selectedIcons.add(icon));
+      document.querySelectorAll('.icon-card').forEach(card => card.classList.add('selected'));
+    }
+
+    function deselectAll() {
+      selectedIcons.clear();
+      document.querySelectorAll('.icon-card').forEach(card => card.classList.remove('selected'));
+    }
+
+    function showStatus(text, type = 'info', progress = '') {
+      const status = document.getElementById('status');
+      const statusText = document.getElementById('status-text');
+      const progressEl = document.getElementById('progress');
+
+      status.className = `status show ${type}`;
+      statusText.textContent = text;
+      progressEl.textContent = progress;
+    }
+
+    async function downloadAllIcons() {
+      if (selectedIcons.size === 0) {
+        alert('请至少选择一个图标！');
+        return;
+      }
+
+      showStatus('正在生成图标...', 'info');
+
+      let completed = 0;
+      const total = selectedIcons.size * Object.keys(COLORS).length;
+
+      for (const iconName of selectedIcons) {
+        for (const [colorName, colorHex] of Object.entries(COLORS)) {
+          try {
+            await downloadIcon(iconName, colorName, colorHex);
+            completed++;
+            showStatus(
+              `正在生成图标... ${completed}/${total}`,
+              'info',
+              `${iconName}.png (${colorName})`
+            );
+
+            // 添加小延迟避免浏览器阻止下载
+            await new Promise(resolve => setTimeout(resolve, 100));
+          } catch (error) {
+            console.error(`Failed to download ${iconName} (${colorName}):`, error);
+          }
+        }
+      }
+
+      showStatus(`✅ 完成！已生成 ${total} 个图标`, 'success');
+    }
+
+    async function downloadIcon(iconName, colorName, colorHex) {
+      // 获取 SVG 元素
+      const iconElement = document.querySelector(`[data-lucide="${iconName}"]`);
+      if (!iconElement) {
+        throw new Error(`Icon ${iconName} not found`);
+      }
+
+      // 创建 SVG 副本
+      const svg = iconElement.cloneNode(true);
+      svg.setAttribute('width', '48');
+      svg.setAttribute('height', '48');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+      // 设置颜色
+      svg.querySelectorAll('*').forEach(el => {
+        if (el.hasAttribute('stroke')) {
+          el.setAttribute('stroke', colorHex);
+        }
+        if (el.hasAttribute('fill') && el.getAttribute('fill') !== 'none') {
+          el.setAttribute('fill', colorHex);
+        }
+      });
+
+      // 转换为 PNG
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement('canvas');
+      canvas.width = 48;
+      canvas.height = 48;
+      const ctx = canvas.getContext('2d');
+
+      const img = new Image();
+      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+
+      return new Promise((resolve, reject) => {
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0);
+          URL.revokeObjectURL(url);
+
+          canvas.toBlob((blob) => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `${colorName}__${iconName}.png`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+            resolve();
+          }, 'image/png');
+        };
+        img.onerror = reject;
+        img.src = url;
+      });
+    }
+
+    // 初始化
+    loadIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+{
+  "totalThemes": 17,
+  "totalUniqueColors": 52,
+  "themeMapping": {
+    "pink-girl": {
+      "name": "粉色少女",
+      "type": "free",
+      "colors": {
+        "primary": "#FFB6C1",
+        "secondary": "#FFC0CB",
+        "accent": "#FF69B4",
+        "white": "#FFFFFF"
+      }
+    },
+    "green-fresh": {
+      "name": "绿意盎然",
+      "type": "free",
+      "colors": {
+        "primary": "#4CAF50",
+        "secondary": "#8BC34A",
+        "accent": "#81C784",
+        "white": "#FFFFFF"
+      }
+    },
+    "dark-mode": {
+      "name": "暗夜星辰",
+      "type": "free",
+      "colors": {
+        "primary": "#BB86FC",
+        "secondary": "#03DAC6",
+        "accent": "#CF6679",
+        "white": "#FFFFFF"
+      }
+    },
+    "lavender-dream": {
+      "name": "薰衣草梦境",
+      "type": "free",
+      "colors": {
+        "primary": "#9B7EBD",
+        "secondary": "#D4A5E0",
+        "accent": "#B695C0",
+        "white": "#FFFFFF"
+      }
+    },
+    "coral-beach": {
+      "name": "珊瑚海滩",
+      "type": "free",
+      "colors": {
+        "primary": "#FF7F7F",
+        "secondary": "#FFB3B3",
+        "accent": "#FF6B6B",
+        "white": "#FFFFFF"
+      }
+    },
+    "mint-fresh": {
+      "name": "薄荷清新",
+      "type": "free",
+      "colors": {
+        "primary": "#5DD39E",
+        "secondary": "#BCE5D6",
+        "accent": "#3FB67E",
+        "white": "#FFFFFF"
+      }
+    },
+    "sky-blue": {
+      "name": "天空之蓝",
+      "type": "free",
+      "colors": {
+        "primary": "#4FC3F7",
+        "secondary": "#81D4FA",
+        "accent": "#29B6F6",
+        "white": "#FFFFFF"
+      }
+    },
+    "peach-blossom": {
+      "name": "桃花粉嫩",
+      "type": "free",
+      "colors": {
+        "primary": "#FFAB91",
+        "secondary": "#FFCCBC",
+        "accent": "#FF8A65",
+        "white": "#FFFFFF"
+      }
+    },
+    "cherry-blossom": {
+      "name": "樱花季节",
+      "type": "signin",
+      "colors": {
+        "primary": "#FFB7C5",
+        "secondary": "#FFC9D9",
+        "accent": "#FF9EB1",
+        "white": "#FFFFFF"
+      }
+    },
+    "autumn-maple": {
+      "name": "秋日枫叶",
+      "type": "signin",
+      "colors": {
+        "primary": "#E67E22",
+        "secondary": "#F39C12",
+        "accent": "#D35400",
+        "white": "#FFFFFF"
+      }
+    },
+    "winter-snow": {
+      "name": "冬日雪境",
+      "type": "signin",
+      "colors": {
+        "primary": "#B0C4DE",
+        "secondary": "#ADD8E6",
+        "accent": "#87CEEB",
+        "white": "#FFFFFF"
+      }
+    },
+    "starry-sky": {
+      "name": "璀璨星空",
+      "type": "points",
+      "colors": {
+        "primary": "#4A90E2",
+        "secondary": "#7B68EE",
+        "accent": "#00BFFF",
+        "white": "#FFFFFF"
+      }
+    },
+    "golden-sunset": {
+      "name": "金色余晖",
+      "type": "points",
+      "colors": {
+        "primary": "#FFB74D",
+        "secondary": "#FFA726",
+        "accent": "#FF9800",
+        "white": "#FFFFFF"
+      }
+    },
+    "klein-blue": {
+      "name": "克莱因蓝",
+      "type": "points",
+      "colors": {
+        "primary": "#002FA7",
+        "secondary": "#0047AB",
+        "accent": "#4169E1",
+        "white": "#FFFFFF"
+      }
+    },
+    "rose-gold": {
+      "name": "玫瑰金",
+      "type": "points",
+      "colors": {
+        "primary": "#E8A0A0",
+        "secondary": "#F5C6C6",
+        "accent": "#D87093",
+        "white": "#FFFFFF"
+      }
+    },
+    "aurora": {
+      "name": "极光幻境",
+      "type": "premium",
+      "colors": {
+        "primary": "#00D9FF",
+        "secondary": "#7B2FFF",
+        "accent": "#FF1744",
+        "white": "#FFFFFF"
+      }
+    },
+    "galaxy": {
+      "name": "银河星系",
+      "type": "premium",
+      "colors": {
+        "primary": "#9D50BB",
+        "secondary": "#6E48AA",
+        "accent": "#FF6B9D",
+        "white": "#FFFFFF"
+      }
+    }
+  },
+  "allUniqueColors": [
+    "#FFB6C1",
+    "#FFC0CB",
+    "#FF69B4",
+    "#4CAF50",
+    "#8BC34A",
+    "#81C784",
+    "#BB86FC",
+    "#03DAC6",
+    "#CF6679",
+    "#9B7EBD",
+    "#D4A5E0",
+    "#B695C0",
+    "#FF7F7F",
+    "#FFB3B3",
+    "#FF6B6B",
+    "#5DD39E",
+    "#BCE5D6",
+    "#3FB67E",
+    "#4FC3F7",
+    "#81D4FA",
+    "#29B6F6",
+    "#FFAB91",
+    "#FFCCBC",
+    "#FF8A65",
+    "#FFB7C5",
+    "#FFC9D9",
+    "#FF9EB1",
+    "#E67E22",
+    "#F39C12",
+    "#D35400",
+    "#B0C4DE",
+    "#ADD8E6",
+    "#87CEEB",
+    "#4A90E2",
+    "#7B68EE",
+    "#00BFFF",
+    "#FFB74D",
+    "#FFA726",
+    "#FF9800",
+    "#002FA7",
+    "#0047AB",
+    "#4169E1",
+    "#E8A0A0",
+    "#F5C6C6",
+    "#D87093",
+    "#00D9FF",
+    "#7B2FFF",
+    "#FF1744",
+    "#9D50BB",
+    "#6E48AA",
+    "#FF6B9D",
+    "#FFFFFF"
+  ]
+}

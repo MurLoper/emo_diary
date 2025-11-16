@@ -1,0 +1,168 @@
+<view class="container" style="background: {{cssVars['--theme-background']}};">
+  <!-- 头部 - 固定 -->
+  <view class="header" style="background: {{cssVars['--theme-surface']}};">
+    <view class="header-content">
+      <navigator open-type="navigateBack" class="back-btn">
+        <text class="icon-back">←</text>
+      </navigator>
+      <text class="header-title">创建图文集</text>
+      <button
+        class="create-btn {{!title || selectedDiaries.length === 0 ? 'disabled' : ''}}"
+        style="background: {{cssVars['--theme-primary']}};"
+        bindtap="onCreate"
+        disabled="{{!title || selectedDiaries.length === 0}}"
+      >
+        创建
+      </button>
+    </view>
+  </view>
+
+  <!-- 内容区域 - 可滚动 -->
+  <scroll-view class="content" scroll-y>
+    <!-- 基本信息 -->
+    <view class="section">
+      <view class="form-item">
+        <text class="form-label">图文集标题</text>
+        <input
+          class="form-input"
+          placeholder="给图文集起个名字..."
+          value="{{title}}"
+          bindinput="onTitleInput"
+          style="background: {{cssVars['--theme-surface']}}; color: {{cssVars['--theme-text-primary']}}; border-color: {{cssVars['--theme-border']}};"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">描述（可选）</text>
+        <textarea
+          class="form-textarea"
+          placeholder="添加一些描述..."
+          value="{{description}}"
+          bindinput="onDescriptionInput"
+          style="background: {{cssVars['--theme-surface']}}; color: {{cssVars['--theme-text-primary']}}; border-color: {{cssVars['--theme-border']}};"
+        />
+      </view>
+    </view>
+
+    <!-- 选择模板风格 -->
+    <view class="section">
+      <text class="section-title">选择模板风格</text>
+      <view class="templates-grid">
+        <view
+          wx:for="{{templates}}"
+          wx:key="id"
+          class="template-card {{selectedTemplate === item.id ? 'selected' : ''}}"
+          bindtap="onTemplateSelect"
+          data-id="{{item.id}}"
+          style="border-color: {{selectedTemplate === item.id ? item.color : cssVars['--theme-border']}};"
+        >
+          <image class="template-preview" src="{{item.preview}}" mode="aspectFill" />
+          <view class="template-overlay"></view>
+
+          <!-- 选中标记 -->
+          <view wx:if="{{selectedTemplate === item.id}}" class="template-check" style="background: {{item.color}};">
+            <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 6 9 17l-5-5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </view>
+
+          <!-- 模板名称 -->
+          <view class="template-info">
+            <text class="template-name">{{item.name}}</text>
+          </view>
+
+          <!-- 详细信息卡片 -->
+          <view class="template-details" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{item.color}}08 100%);">
+            <text class="template-desc" style="color: {{cssVars['--theme-text-secondary']}};">{{item.description}}</text>
+            
+            <!-- 特性标签 -->
+            <view class="template-features">
+              <text
+                wx:for="{{item.features}}"
+                wx:for-item="feature"
+                wx:key="*this"
+                class="feature-tag"
+                style="background: {{item.color}}15; color: {{item.color}};"
+              >
+                {{feature}}
+              </text>
+            </view>
+
+            <!-- 推荐用途 -->
+            <text class="template-suggest" style="color: {{cssVars['--theme-text-secondary']}};">
+              <svg width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 4rpx;">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              {{item.suggestedFor}}
+            </text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 选择日记 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">选择日记</text>
+        <text class="diary-count" style="color: {{cssVars['--theme-text-secondary']}};">
+          已选 {{selectedDiaries.length}}/{{diaries.length}}
+        </text>
+      </view>
+
+      <view class="diaries-list">
+        <view
+          wx:for="{{diaries}}"
+          wx:key="id"
+          class="diary-item {{selectedDiaries.indexOf(item.id) !== -1 ? 'selected' : ''}}"
+          bindtap="onDiaryToggle"
+          data-id="{{item.id}}"
+          style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-primary']}}{{selectedDiaries.indexOf(item.id) !== -1 ? '15' : '05'}} 100%); border-color: {{selectedDiaries.indexOf(item.id) !== -1 ? cssVars['--theme-primary'] : cssVars['--theme-border']}};"
+        >
+          <view class="diary-checkbox" style="background: {{selectedDiaries.indexOf(item.id) !== -1 ? cssVars['--theme-primary'] : cssVars['--theme-border']}};">
+            <svg wx:if="{{selectedDiaries.indexOf(item.id) !== -1}}" class="check-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 6 9 17l-5-5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </view>
+
+          <image wx:if="{{item.images && item.images.length > 0}}" class="diary-image" src="{{item.images[0]}}" mode="aspectFill" />
+
+          <view class="diary-info">
+            <text class="diary-title">{{item.title}}</text>
+            <text class="diary-content" style="color: {{cssVars['--theme-text-secondary']}};">{{item.content}}</text>
+            <view class="diary-tags">
+              <text
+                wx:for="{{item.tags}}"
+                wx:for-item="tag"
+                wx:for-index="tagIdx"
+                wx:key="tagIdx"
+                wx:if="{{tagIdx < 3}}"
+                class="diary-tag"
+                style="background: {{cssVars['--theme-primary']}}15; color: {{cssVars['--theme-primary']}};"
+              >
+                {{tag}}
+              </text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- AI推荐提示 -->
+    <view class="section">
+      <view class="ai-tip" style="background: {{cssVars['--theme-accent']}}15;">
+        <svg class="ai-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" stroke="{{cssVars['--theme-accent']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <view class="ai-tip-content">
+          <text class="ai-tip-title" style="color: {{cssVars['--theme-accent']}};">AI智能推荐</text>
+          <text class="ai-tip-desc" style="color: {{cssVars['--theme-text-secondary']}};">
+            系统可以根据标签和内容自动推荐相似的日记组合
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部占位 -->
+    <view class="bottom-placeholder"></view>
+  </scroll-view>
+</view>

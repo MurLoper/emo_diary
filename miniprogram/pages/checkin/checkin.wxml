@@ -1,0 +1,170 @@
+<!--pages/checkin/checkin.wxml-->
+<view class="container" style="background: {{cssVars['--theme-background']}};">
+  <!-- 头部 -->
+  <view class="header" style="background: {{cssVars['--theme-surface']}};">
+    <view class="header-content">
+      <view class="back-button" bindtap="onBack">
+        <text class="back-icon">←</text>
+      </view>
+      <view class="header-text">
+        <view class="header-title" style="color: {{cssVars['--theme-text-primary']}};">每日签到</view>
+        <view class="header-subtitle" style="color: {{cssVars['--theme-text-secondary']}};">
+          坚持签到，解锁更多主题
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <scroll-view class="content" scroll-y>
+    <!-- 签到卡片 -->
+    <view class="checkin-section">
+      <view class="checkin-card" style="background: {{cssVars['--theme-background']}};">
+        <view class="checkin-stats">
+          <view class="stats-left">
+            <view class="continuous-days">
+              <svg class="trend-icon" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <polyline points="17 6 23 6 23 12" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <text class="days-number">{{continuousDays}}</text>
+            </view>
+            <text class="stats-label" style="color: {{cssVars['--theme-text-secondary']}};">
+              连续签到天数
+            </text>
+          </view>
+          <button
+            class="checkin-button {{hasCheckedInToday ? 'checked' : ''}}"
+            bindtap="onCheckIn"
+            disabled="{{hasCheckedInToday}}"
+            style="background: {{hasCheckedInToday ? cssVars['--theme-border'] : cssVars['--theme-primary']}};"
+          >
+            <text wx:if="{{hasCheckedInToday}}" class="button-icon">✓</text>
+            <svg wx:else class="button-icon" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="9" width="16" height="12" rx="1" stroke="#FFFFFF" stroke-width="2"/>
+              <line x1="12" y1="9" x2="12" y2="21" stroke="#FFFFFF" stroke-width="1.5"/>
+              <path d="M4 12h16" stroke="#FFFFFF" stroke-width="1.5"/>
+              <path d="M7 9c0-2 1-4 5-4s5 2 5 4" stroke="#FFFFFF" stroke-width="1.5"/>
+            </svg>
+            <text>{{hasCheckedInToday ? '已签到' : '立即签到'}}</text>
+          </button>
+        </view>
+
+        <!-- 今日奖励 -->
+        <view class="daily-reward" style="background: {{cssVars['--theme-surface']}};">
+          <text style="color: {{cssVars['--theme-text-secondary']}};">今日签到奖励</text>
+          <view class="reward-amount">
+            <svg class="reward-icon" width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" stroke="{{cssVars['--theme-accent']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <text style="color: {{cssVars['--theme-accent']}};">+10 积分</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 奖励提示 -->
+    <view wx:if="{{showReward}}" class="reward-toast" style="background: {{cssVars['--theme-primary']}};">
+      <svg class="toast-icon" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <text class="toast-text">+{{rewardPoints}} 积分</text>
+    </view>
+
+    <!-- 签到日历 -->
+    <view class="calendar-section">
+      <view class="section-title">{{currentYear}}年{{currentMonth}}月</view>
+      <view class="calendar-card" style="background: {{cssVars['--theme-surface']}};">
+        <!-- 星期标题 -->
+        <view class="calendar-weekdays">
+          <view
+            wx:for="{{weekdays}}"
+            wx:key="*this"
+            class="weekday-label"
+            style="color: {{cssVars['--theme-text-secondary']}};"
+          >
+            {{item}}
+          </view>
+        </view>
+
+        <!-- 日期 -->
+        <view class="calendar-days">
+          <view
+            wx:for="{{calendarDays}}"
+            wx:key="index"
+            class="day-cell"
+          >
+            <view
+              wx:if="{{item}}"
+              class="day-content {{item === today ? 'today' : ''}} {{checkedDays.includes(item) ? 'checked' : ''}}"
+              style="background: {{item === today ? cssVars['--theme-primary'] : (checkedDays.includes(item) ? cssVars['--theme-primary'] + '20' : 'transparent')}}; color: {{item === today ? '#FFFFFF' : (checkedDays.includes(item) ? cssVars['--theme-primary'] : cssVars['--theme-text-primary'])}};"
+            >
+              <text class="day-number">{{item}}</text>
+              <view
+                wx:if="{{checkedDays.includes(item) && item !== today}}"
+                class="check-dot"
+                style="background: {{cssVars['--theme-primary']}};"
+              />
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 连续签到奖励 -->
+    <view class="rewards-section">
+      <view class="section-title">连续签到奖励</view>
+      <view class="rewards-list">
+        <view
+          wx:for="{{bonusMilestones}}"
+          wx:key="days"
+          class="reward-item"
+          style="background: {{cssVars['--theme-surface']}}; opacity: {{continuousDays >= item.days ? 1 : 0.6}};"
+        >
+          <view class="reward-info">
+            <view
+              class="reward-icon-wrapper"
+              style="background: {{cssVars['--theme-primary']}}20; color: {{cssVars['--theme-primary']}};"
+            >
+              <svg class="gift-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="9" width="16" height="12" rx="1" stroke="{{cssVars['--theme-primary']}}" stroke-width="2"/>
+                <line x1="12" y1="9" x2="12" y2="21" stroke="{{cssVars['--theme-primary']}}" stroke-width="1.5"/>
+                <path d="M4 12h16" stroke="{{cssVars['--theme-primary']}}" stroke-width="1.5"/>
+                <path d="M7 9c0-2 1-4 5-4s5 2 5 4" stroke="{{cssVars['--theme-primary']}}" stroke-width="1.5"/>
+              </svg>
+            </view>
+            <view class="reward-text">
+              <view class="reward-label">{{item.label}}</view>
+              <view class="reward-detail" style="color: {{cssVars['--theme-text-secondary']}};">
+                额外奖励 {{item.points}} 积分
+                <text wx:if="{{item.coins > 0}}"> + {{item.coins}} 心晴币</text>
+              </view>
+            </view>
+          </view>
+          <view
+            wx:if="{{continuousDays >= item.days}}"
+            class="reward-check"
+            style="background: {{cssVars['--theme-primary']}};"
+          >
+            <text class="check-icon">✓</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 签到规则 -->
+    <view class="rules-section">
+      <view class="section-title">签到规则</view>
+      <view
+        class="rules-card"
+        style="background: {{cssVars['--theme-surface']}}; color: {{cssVars['--theme-text-secondary']}};"
+      >
+        <view class="rule-item">• 每日签到可获得10积分</view>
+        <view class="rule-item">• 连续签到7天额外奖励20积分</view>
+        <view class="rule-item">• 连续签到30天额外奖励100积分 + 18心晴币</view>
+        <view class="rule-item">• 连续签到88天额外奖励88心晴币</view>
+        <view class="rule-item">• 连续签到100天额外奖励500积分</view>
+        <view class="rule-item">• 签到中断后从第1天重新开始</view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

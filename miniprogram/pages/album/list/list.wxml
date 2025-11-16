@@ -1,0 +1,109 @@
+<!--pages/album/list/list.wxml-->
+<view class="container" style="background: {{cssVars['--theme-background']}};">
+  <!-- 头部 -->
+  <view class="header" style="background: {{cssVars['--theme-surface']}};">
+    <view class="header-content">
+      <text class="header-title" style="color: {{cssVars['--theme-text-primary']}};">图文集</text>
+      <view bindtap="navigateToCreate" class="create-btn" style="background: {{cssVars['--theme-primary']}};">
+        <text class="icon">+</text>
+      </view>
+    </view>
+    <text class="header-subtitle" style="color: {{cssVars['--theme-text-secondary']}};">
+      将日记整理成精美的图文集
+    </text>
+  </view>
+
+  <!-- 图文集列表 -->
+  <scroll-view class="content" scroll-y wx:if="{{albums.length > 0}}">
+    <view class="albums-list">
+      <view
+        wx:for="{{albums}}"
+        wx:key="id"
+        class="album-card"
+        bindtap="onAlbumTap"
+        data-id="{{item.id}}"
+        style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-accent']}}08 100%);"
+      >
+        <!-- 封面图 -->
+        <view class="album-cover">
+          <image class="cover-image" src="{{item.cover}}" mode="aspectFill" />
+          <view class="cover-overlay"></view>
+          <view class="cover-info">
+            <text class="album-title">{{item.title}}</text>
+            <view class="album-meta">
+              <svg class="meta-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="16" y1="2" x2="16" y2="6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="8" y1="2" x2="8" y2="6" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="3" y1="10" x2="21" y2="10" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <text class="meta-text">{{item.date}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 信息区域 -->
+        <view class="album-info">
+          <text class="album-desc" style="color: {{cssVars['--theme-text-secondary']}};">
+            {{item.description}}
+          </text>
+          <view class="album-footer">
+            <view class="album-tags">
+              <view
+                wx:for="{{item.tags}}"
+                wx:for-item="tag"
+                wx:for-index="tagIdx"
+                wx:key="tagIdx"
+                wx:if="{{tagIdx < 2}}"
+                class="tag"
+                style="background: {{cssVars['--theme-primary']}}15; color: {{cssVars['--theme-primary']}};"
+              >
+                <text class="tag-icon">#</text>
+                <text class="tag-text">{{tag}}</text>
+              </view>
+            </view>
+            <text class="album-count" style="color: {{cssVars['--theme-text-secondary']}};">
+              {{item.diaryCount}}篇日记
+            </text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <view class="empty-icon" style="background: {{cssVars['--theme-primary']}}20;">
+      <svg class="icon-text" width="64" height="64" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9" cy="9" r="2" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </view>
+    <text class="empty-title">创建你的第一个图文集</text>
+    <text class="empty-desc" style="color: {{cssVars['--theme-text-secondary']}};">
+      精选多篇日记，用精美模板展示你的故事
+    </text>
+
+    <!-- 模板预览 -->
+    <view class="template-preview">
+      <view
+        wx:for="{{templates}}"
+        wx:key="id"
+        class="template-card"
+        style="background: linear-gradient(135deg, {{item.color}}10 0%, {{item.color}}20 100%);"
+      >
+        <text class="template-emoji">{{item.icon}}</text>
+        <text class="template-name" style="color: {{item.color}};">{{item.name}}</text>
+      </view>
+    </view>
+
+    <view
+      bindtap="navigateToCreate"
+      class="start-btn"
+      style="background: {{cssVars['--theme-primary']}};"
+    >
+      <text>开始创建</text>
+    </view>
+  </view>
+</view>

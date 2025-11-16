@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全主题图标下载工具 - 17个主题 × 46个图标</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .stats {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #FF6B9D;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #FF6B9D;
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover {
+      background: #ff5a8d;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+    }
+
+    .btn-secondary {
+      background: #8B7BFF;
+      color: white;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-bottom: 30px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 10px;
+    }
+
+    .icon-card {
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .icon-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .icon-card.selected {
+      border-color: #FF6B9D;
+      background: #FFF5F8;
+    }
+
+    .icon-preview {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 8px;
+    }
+
+    .icon-name {
+      font-size: 10px;
+      color: #666;
+      word-break: break-word;
+    }
+
+    .status {
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status.info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .status.warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background: #e0e0e0;
+      border-radius: 15px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FF6B9D, #8B7BFF);
+      transition: width 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .theme-section {
+      margin-bottom: 20px;
+    }
+
+    .theme-header {
+      font-weight: bold;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #f0f0f0;
+      border-radius: 5px;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .color-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      background: white;
+      border-radius: 5px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .color-box {
+      width: 30px;
+      height: 30px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+
+    .color-info {
+      flex: 1;
+      font-size: 12px;
+    }
+
+    .color-label {
+      font-weight: bold;
+    }
+
+    .color-hex {
+      color: #666;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 全主题图标批量下载工具</h1>
+    <p class="subtitle">支持所有17个主题 × 46个图标 = 2,392个文件</p>
+
+    <div class="stats">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">46</div>
+          <div class="stat-label">图标数量</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">17</div>
+          <div class="stat-label">主题数量</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">52</div>
+          <div class="stat-label">唯一颜色</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="total-files">2392</div>
+          <div class="stat-label">总文件数</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-primary" onclick="downloadAllIcons()">
+        📥 下载所有图标（2,392个文件）
+      </button>
+      <button class="btn-secondary" onclick="selectAll()">✓ 全选图标</button>
+      <button class="btn-secondary" onclick="deselectAll()">✗ 取消全选</button>
+    </div>
+
+    <h3 style="margin-bottom: 15px;">选择要下载的图标:</h3>
+    <div id="icon-grid" class="icon-grid"></div>
+
+    <div id="status" class="status">
+      <div id="status-text"></div>
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill">0%</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+      <h3 style="margin-bottom: 15px;">主题颜色配置预览:</h3>
+      <div id="theme-colors"></div>
+    </div>
+  </div>
+
+  <script>
+    // 46个图标列表
+    const ICONS = [
+      'arrow-left', 'arrow-right', 'arrow-up', 'award', 'bell', 'book-open',
+      'calendar', 'check', 'chevron-down', 'chevron-left', 'chevron-right',
+      'clock', 'cloud', 'code', 'coins', 'credit-card', 'crown', 'download',
+      'eye', 'eye-off', 'filter', 'gift', 'heart', 'help-circle', 'home',
+      'image', 'lock', 'mail', 'maximize-2', 'palette', 'phone', 'plus',
+      'printer', 'save', 'search', 'settings', 'share-2', 'shield',
+      'smartphone', 'sparkles', 'star', 'tag', 'trending-up', 'user', 'x', 'zap'
+    ];
+
+    // 17个主题的完整颜色配置
+    const THEME_COLORS = {
+      "pink-girl": { name: "粉色少女", type: "free", colors: { primary: "#FFB6C1", secondary: "#FFC0CB", accent: "#FF69B4", white: "#FFFFFF" }},
+      "green-fresh": { name: "绿意盎然", type: "free", colors: { primary: "#4CAF50", secondary: "#8BC34A", accent: "#81C784", white: "#FFFFFF" }},
+      "dark-mode": { name: "暗夜星辰", type: "free", colors: { primary: "#BB86FC", secondary: "#03DAC6", accent: "#CF6679", white: "#FFFFFF" }},
+      "lavender-dream": { name: "薰衣草梦境", type: "free", colors: { primary: "#9B7EBD", secondary: "#D4A5E0", accent: "#B695C0", white: "#FFFFFF" }},
+      "coral-beach": { name: "珊瑚海滩", type: "free", colors: { primary: "#FF7F7F", secondary: "#FFB3B3", accent: "#FF6B6B", white: "#FFFFFF" }},
+      "mint-fresh": { name: "薄荷清新", type: "free", colors: { primary: "#5DD39E", secondary: "#BCE5D6", accent: "#3FB67E", white: "#FFFFFF" }},
+      "sky-blue": { name: "天空之蓝", type: "free", colors: { primary: "#4FC3F7", secondary: "#81D4FA", accent: "#29B6F6", white: "#FFFFFF" }},
+      "peach-blossom": { name: "桃花粉嫩", type: "free", colors: { primary: "#FFAB91", secondary: "#FFCCBC", accent: "#FF8A65", white: "#FFFFFF" }},
+      "cherry-blossom": { name: "樱花季节", type: "signin", colors: { primary: "#FFB7C5", secondary: "#FFC9D9", accent: "#FF9EB1", white: "#FFFFFF" }},
+      "autumn-maple": { name: "秋日枫叶", type: "signin", colors: { primary: "#E67E22", secondary: "#F39C12", accent: "#D35400", white: "#FFFFFF" }},
+      "winter-snow": { name: "冬日雪境", type: "signin", colors: { primary: "#B0C4DE", secondary: "#ADD8E6", accent: "#87CEEB", white: "#FFFFFF" }},
+      "starry-sky": { name: "璀璨星空", type: "points", colors: { primary: "#4A90E2", secondary: "#7B68EE", accent: "#00BFFF", white: "#FFFFFF" }},
+      "golden-sunset": { name: "金色余晖", type: "points", colors: { primary: "#FFB74D", secondary: "#FFA726", accent: "#FF9800", white: "#FFFFFF" }},
+      "klein-blue": { name: "克莱因蓝", type: "points", colors: { primary: "#002FA7", secondary: "#0047AB", accent: "#4169E1", white: "#FFFFFF" }},
+      "rose-gold": { name: "玫瑰金", type: "points", colors: { primary: "#E8A0A0", secondary: "#F5C6C6", accent: "#D87093", white: "#FFFFFF" }},
+      "aurora": { name: "极光幻境", type: "premium", colors: { primary: "#00D9FF", secondary: "#7B2FFF", accent: "#FF1744", white: "#FFFFFF" }},
+      "galaxy": { name: "银河星系", type: "premium", colors: { primary: "#9D50BB", secondary: "#6E48AA", accent: "#FF6B9D", white: "#FFFFFF" }}
+    };
+
+    // 收集所有唯一颜色
+    const uniqueColors = new Set();
+    Object.values(THEME_COLORS).forEach(theme => {
+      Object.values(theme.colors).forEach(color => {
+        uniqueColors.add(color.toUpperCase());
+      });
+    });
+
+    const selectedIcons = new Set(ICONS); // 默认全选
+
+    async function loadIcons() {
+      const grid = document.getElementById('icon-grid');
+
+      for (const iconName of ICONS) {
+        const card = document.createElement('div');
+        card.className = 'icon-card selected';
+        card.onclick = () => toggleIcon(iconName, card);
+
+        const preview = document.createElement('div');
+        preview.className = 'icon-preview';
+        preview.innerHTML = `<i data-lucide="${iconName}" style="width: 32px; height: 32px;"></i>`;
+
+        const name = document.createElement('div');
+        name.className = 'icon-name';
+        name.textContent = iconName;
+
+        card.appendChild(preview);
+        card.appendChild(name);
+        grid.appendChild(card);
+      }
+
+      // 加载 Lucide 图标库
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/lucide@latest';
+      script.onload = () => {
+        lucide.createIcons();
+        loadThemeColors();
+      };
+      document.body.appendChild(script);
+    }
+
+    function loadThemeColors() {
+      const container = document.getElementById('theme-colors');
+
+      const typeGroups = {
+        'free': [],
+        'signin': [],
+        'points': [],
+        'premium': []
+      };
+
+      Object.entries(THEME_COLORS).forEach(([id, theme]) => {
+        typeGroups[theme.type].push({ id, ...theme });
+      });
+
+      const typeLabels = {
+        'free': '🆓 免费主题',
+        'signin': '✅ 签到解锁',
+        'points': '💎 积分解锁',
+        'premium': '👑 高级主题'
+      };
+
+      Object.entries(typeGroups).forEach(([type, themes]) => {
+        if (themes.length === 0) return;
+
+        const section = document.createElement('div');
+        section.className = 'theme-section';
+
+        const header = document.createElement('div');
+        header.className = 'theme-header';
+        header.textContent = typeLabels[type];
+        section.appendChild(header);
+
+        const grid = document.createElement('div');
+        grid.className = 'color-grid';
+
+        themes.forEach(theme => {
+          ['primary', 'secondary', 'accent'].forEach(variant => {
+            const item = document.createElement('div');
+            item.className = 'color-item';
+
+            const box = document.createElement('div');
+            box.className = 'color-box';
+            box.style.background = theme.colors[variant];
+            item.appendChild(box);
+
+            const info = document.createElement('div');
+            info.className = 'color-info';
+            info.innerHTML = `
+              <div class="color-label">${theme.name} - ${variant}</div>
+              <div class="color-hex">${theme.colors[variant]}</div>
+            `;
+            item.appendChild(info);
+
+            grid.appendChild(item);
+          });
+        });
+
+        section.appendChild(grid);
+        container.appendChild(section);
+      });
+    }
+
+    function toggleIcon(iconName, card) {
+      if (selectedIcons.has(iconName)) {
+        selectedIcons.delete(iconName);
+        card.classList.remove('selected');
+      } else {
+        selectedIcons.add(iconName);
+        card.classList.add('selected');
+      }
+      updateTotalFiles();
+    }
+
+    function selectAll() {
+      selectedIcons.clear();
+      ICONS.forEach(icon => selectedIcons.add(icon));
+      document.querySelectorAll('.icon-card').forEach(card => card.classList.add('selected'));
+      updateTotalFiles();
+    }
+
+    function deselectAll() {
+      selectedIcons.clear();
+      document.querySelectorAll('.icon-card').forEach(card => card.classList.remove('selected'));
+      updateTotalFiles();
+    }
+
+    function updateTotalFiles() {
+      const total = selectedIcons.size * uniqueColors.size;
+      document.getElementById('total-files').textContent = total;
+    }
+
+    function showStatus(text, type = 'info') {
+      const status = document.getElementById('status');
+      const statusText = document.getElementById('status-text');
+      status.className = `status show ${type}`;
+      statusText.textContent = text;
+    }
+
+    function updateProgress(completed, total) {
+      const percentage = Math.round((completed / total) * 100);
+      const fill = document.getElementById('progress-fill');
+      fill.style.width = `${percentage}%`;
+      fill.textContent = `${completed}/${total} (${percentage}%)`;
+    }
+
+    async function downloadAllIcons() {
+      if (selectedIcons.size === 0) {
+        alert('请至少选择一个图标！');
+        return;
+      }
+
+      const total = selectedIcons.size * uniqueColors.size;
+      showStatus(`正在生成 ${total} 个图标文件...`, 'info');
+
+      let completed = 0;
+      updateProgress(0, total);
+
+      // 为每个唯一颜色生成所有选中的图标
+      for (const colorHex of uniqueColors) {
+        for (const iconName of selectedIcons) {
+          try {
+            await downloadIcon(iconName, colorHex);
+            completed++;
+            updateProgress(completed, total);
+
+            // 添加小延迟避免浏览器阻止下载
+            await new Promise(resolve => setTimeout(resolve, 50));
+          } catch (error) {
+            console.error(`Failed to download ${iconName} (${colorHex}):`, error);
+          }
+        }
+      }
+
+      showStatus(`✅ 完成！已生成 ${total} 个图标文件`, 'success');
+      setTimeout(() => {
+        showStatus('⚠️ 请将下载的文件移动到 scripts/downloads/ 文件夹，然后运行 node scripts/organizeIconsByColor.js', 'warning');
+      }, 2000);
+    }
+
+    async function downloadIcon(iconName, colorHex) {
+      const iconElement = document.querySelector(`[data-lucide="${iconName}"]`);
+      if (!iconElement) {
+        throw new Error(`Icon ${iconName} not found`);
+      }
+
+      const svg = iconElement.cloneNode(true);
+      svg.setAttribute('width', '48');
+      svg.setAttribute('height', '48');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+      // 应用颜色
+      svg.querySelectorAll('*').forEach(el => {
+        if (el.hasAttribute('stroke')) {
+          el.setAttribute('stroke', colorHex);
+        }
+        if (el.hasAttribute('fill') && el.getAttribute('fill') !== 'none') {
+          el.setAttribute('fill', colorHex);
+        }
+      });
+
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement('canvas');
+      canvas.width = 48;
+      canvas.height = 48;
+      const ctx = canvas.getContext('2d');
+
+      const img = new Image();
+      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+
+      return new Promise((resolve, reject) => {
+        img.onload = () => {
+          ctx.drawImage(img, 0, 0);
+          URL.revokeObjectURL(url);
+
+          canvas.toBlob((blob) => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            // 文件名格式: colorhex__iconname.png (去掉#号)
+            const colorCode = colorHex.replace('#', '').toLowerCase();
+            a.download = `${colorCode}__${iconName}.png`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+            resolve();
+          }, 'image/png');
+        };
+        img.onerror = reject;
+        img.src = url;
+      });
+    }
+
+    loadIcons();
+  </script>
+</body>
+</html>
