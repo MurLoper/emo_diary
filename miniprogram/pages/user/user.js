@@ -130,5 +130,100 @@ Page({
     wx.navigateTo({
       url: '/pages/checkin/checkin'
     });
+  },
+
+  /**
+   * 导航到个人信息编辑页
+   */
+  navigateToPersonalInfo() {
+    wx.showModal({
+      title: '个人信息',
+      content: '个人信息编辑功能开发中...',
+      showCancel: false,
+      confirmText: '我知道了'
+    });
+  },
+
+  /**
+   * 导航到隐私设置页
+   */
+  navigateToPrivacy() {
+    wx.showModal({
+      title: '隐私设置',
+      content: '隐私设置功能开发中...',
+      showCancel: false,
+      confirmText: '我知道了'
+    });
+  },
+
+  /**
+   * 导航到消息通知设置页
+   */
+  navigateToNotification() {
+    wx.showModal({
+      title: '消息通知',
+      content: '消息通知设置功能开发中...',
+      showCancel: false,
+      confirmText: '我知道了'
+    });
+  },
+
+  /**
+   * 导航到帮助中心
+   */
+  navigateToHelp() {
+    wx.showModal({
+      title: '帮助中心',
+      content: '如有问题，请联系客服。\n\n功能说明：\n1. 每日签到可获得积分\n2. 积分可用于解锁主题\n3. 写日记、创建图文集可获得积分奖励',
+      showCancel: false,
+      confirmText: '我知道了'
+    });
+  },
+
+  /**
+   * 导航到关于我们页
+   */
+  navigateToAbout() {
+    wx.showModal({
+      title: '关于我们',
+      content: '心晴日记 v1.0.0\n\n一款温暖的日记应用，记录生活，感受美好。\n\n© 2025 心晴日记团队',
+      showCancel: false,
+      confirmText: '我知道了'
+    });
+  },
+
+  /**
+   * 退出登录
+   */
+  handleLogout() {
+    wx.showModal({
+      title: '退出登录',
+      content: '确定要退出登录吗？',
+      confirmText: '退出',
+      cancelText: '取消',
+      success: (res) => {
+        if (res.confirm) {
+          // 清除本地存储
+          wx.removeStorageSync('token');
+          wx.removeStorageSync('userInfo');
+
+          // 清除全局数据
+          app.globalData.userInfo = null;
+          app.globalData.token = null;
+
+          // 显示成功提示
+          wx.showToast({
+            title: '已退出登录',
+            icon: 'success',
+            duration: 2000
+          });
+
+          // 重新加载用户信息（显示未登录状态）
+          setTimeout(() => {
+            this.loadUserInfo();
+          }, 2000);
+        }
+      }
+    });
   }
 });

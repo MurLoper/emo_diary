@@ -3,24 +3,7 @@
 .container {
   min-height: 100vh;
   padding-bottom: 32rpx;
-}
-
-/* 头部 */
-.header {
-  padding: 80rpx 48rpx 48rpx;
-  text-align: center;
-  margin-bottom: 16rpx;
-}
-
-.header-title {
-  font-size: 56rpx;
-  font-weight: bold;
-  margin-bottom: 16rpx;
-}
-
-.header-subtitle {
-  font-size: 28rpx;
-  opacity: 0.9;
+  padding-top: 32rpx;
 }
 
 /* Banner轮播 */
@@ -146,7 +129,9 @@
 }
 
 .arrow-icon {
-  font-size: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-left: 16rpx;
 }
 

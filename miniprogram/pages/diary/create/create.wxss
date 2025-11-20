@@ -89,6 +89,14 @@
   font-size: 28rpx;
   font-weight: 500;
   margin-bottom: 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.drag-hint {
+  font-size: 24rpx;
+  font-weight: 400;
 }
 
 .image-grid {
@@ -102,6 +110,21 @@
   aspect-ratio: 1;
   border-radius: 16rpx;
   overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+/* 拖拽中的图片项 */
+.image-item.dragging {
+  transform: scale(1.05);
+  opacity: 0.8;
+  z-index: 10;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.2);
+}
+
+/* 拖拽目标区域 */
+.image-item.drag-over {
+  transform: scale(0.95);
+  opacity: 0.6;
 }
 
 .uploaded-image {
@@ -122,6 +145,36 @@
   justify-content: center;
   color: #FFFFFF;
   font-size: 32rpx;
+  z-index: 5;
+  transition: background 0.2s;
+}
+
+.image-remove:active {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* 拖拽指示器 */
+.drag-indicator {
+  position: absolute;
+  bottom: 8rpx;
+  right: 8rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8rpx;
+  padding: 8rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+.drag-dots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4rpx;
+}
+
+.drag-dots .dot {
+  width: 4rpx;
+  height: 4rpx;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
 }
 
 .image-upload {
@@ -133,6 +186,11 @@
   align-items: center;
   justify-content: center;
   gap: 8rpx;
+  transition: all 0.2s;
+}
+
+.image-upload:active {
+  transform: scale(0.95);
 }
 
 .upload-icon {

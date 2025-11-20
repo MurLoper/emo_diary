@@ -91,7 +91,11 @@
             <view class="menu-label">日记</view>
             <view class="menu-extra">
               <text class="menu-value" style="color: {{cssVars['--theme-text-secondary']}};">{{diaryCount}}</text>
-              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+              <view class="arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </view>
             </view>
           </view>
           <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
@@ -105,7 +109,11 @@
             <view class="menu-label">我的主题</view>
             <view class="menu-extra">
               <text class="menu-value" style="color: {{cssVars['--theme-text-secondary']}};">{{themeCount}}</text>
-              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+              <view class="arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </view>
             </view>
           </view>
         </view>
@@ -126,7 +134,11 @@
             <view class="menu-label">积分</view>
             <view class="menu-extra">
               <text class="menu-value" style="color: {{cssVars['--theme-text-secondary']}};">{{userPoints}}</text>
-              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+              <view class="arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </view>
             </view>
           </view>
           <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
@@ -143,7 +155,11 @@
                 HOT
               </view>
               <text class="menu-value" style="color: {{cssVars['--theme-text-secondary']}};">{{userCoins}}</text>
-              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+              <view class="arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </view>
             </view>
           </view>
         </view>
@@ -158,7 +174,7 @@
           基础设置
         </view>
         <view class="menu-card" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-secondary']}}08 100%);">
-          <view class="menu-item">
+          <view class="menu-item" bindtap="navigateToPersonalInfo">
             <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
               <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -167,11 +183,15 @@
             </view>
             <view class="menu-label">个人信息</view>
             <view class="menu-extra">
-              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+              <view class="arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </view>
             </view>
           </view>
           <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
-          <view class="menu-item">
+          <view class="menu-item" bindtap="navigateToPrivacy">
             <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
               <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -179,11 +199,15 @@
             </view>
             <view class="menu-label">隐私设置</view>
             <view class="menu-extra">
-              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+              <view class="arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </view>
             </view>
           </view>
           <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
-          <view class="menu-item">
+          <view class="menu-item" bindtap="navigateToNotification">
             <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
               <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -191,7 +215,11 @@
             </view>
             <view class="menu-label">消息通知</view>
             <view class="menu-extra">
-              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+              <view class="arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </view>
             </view>
           </view>
         </view>
@@ -203,7 +231,7 @@
           其他选项
         </view>
         <view class="menu-card" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-secondary']}}08 100%);">
-          <view class="menu-item">
+          <view class="menu-item" bindtap="navigateToHelp">
             <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
               <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -212,11 +240,15 @@
             </view>
             <view class="menu-label">帮助中心</view>
             <view class="menu-extra">
-              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+              <view class="arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </view>
             </view>
           </view>
           <view class="divider" style="background: {{cssVars['--theme-border']}};"/>
-          <view class="menu-item">
+          <view class="menu-item" bindtap="navigateToAbout">
             <view class="menu-icon" style="color: {{cssVars['--theme-primary']}};">
               <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -225,7 +257,11 @@
             </view>
             <view class="menu-label">关于我们</view>
             <view class="menu-extra">
-              <text class="arrow" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+              <view class="arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </view>
             </view>
           </view>
         </view>
@@ -233,7 +269,7 @@
 
       <!-- 退出登录 -->
       <view class="logout-section">
-        <button class="logout-button" style="background: {{cssVars['--theme-surface']}}; color: {{cssVars['--theme-text-secondary']}};">
+        <button class="logout-button" bindtap="handleLogout" style="background: {{cssVars['--theme-surface']}}; color: {{cssVars['--theme-text-secondary']}};">
           退出登录
         </button>
       </view>

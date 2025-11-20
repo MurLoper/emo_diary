@@ -44,18 +44,37 @@
 
     <!-- 图片上传 -->
     <view class="image-section">
-      <view class="section-title">添加照片 ({{images.length}}/9)</view>
+      <view class="section-title">
+        添加照片 ({{images.length}}/9)
+        <text wx:if="{{images.length > 1}}" class="drag-hint" style="color: {{cssVars['--theme-text-secondary']}};">长按可拖动排序</text>
+      </view>
       <view class="image-grid">
         <view
           wx:for="{{images}}"
           wx:key="index"
-          class="image-item"
+          class="image-item {{dragIndex === index ? 'dragging' : ''}} {{dragOverIndex === index ? 'drag-over' : ''}}"
+          data-index="{{index}}"
+          bindlongpress="onImageLongPress"
+          bindtouchmove="onImageTouchMove"
+          bindtouchend="onImageTouchEnd"
+          bindtouchcancel="onImageTouchEnd"
         >
           <image class="uploaded-image" src="{{item}}" mode="aspectFill" />
-          <view class="image-remove" bindtap="onRemoveImage" data-index="{{index}}">
+          <view class="image-remove" bindtap="onRemoveImage" data-index="{{index}}" catchtap="onRemoveImage">
             <svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M18 6 6 18M6 6l12 12" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
+          </view>
+          <!-- 拖拽指示器 -->
+          <view wx:if="{{images.length > 1}}" class="drag-indicator">
+            <view class="drag-dots">
+              <view class="dot"></view>
+              <view class="dot"></view>
+              <view class="dot"></view>
+              <view class="dot"></view>
+              <view class="dot"></view>
+              <view class="dot"></view>
+            </view>
           </view>
         </view>
         <view

@@ -1,2 +1,208 @@
 <!--pages/album/preview/preview.wxml-->
-<text>pages/album/preview/preview.wxml</text>
+<view class="container" style="background: {{cssVars['--theme-background']}};">
+  <!-- 头部 - 固定 -->
+  <view class="header" style="background: {{cssVars['--theme-surface']}};">
+    <view class="header-content">
+      <navigator open-type="navigateBack" class="back-btn">
+        <text class="icon-back">←</text>
+      </navigator>
+      <text class="header-title">{{album.title || '图文集预览'}}</text>
+      <view class="share-btn" bindtap="onShare" style="color: {{cssVars['--theme-primary']}};">
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="5" r="3" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="6" cy="12" r="3" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="18" cy="19" r="3" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="{{cssVars['--theme-primary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view wx:if="{{loading}}" class="loading-state">
+    <view class="loading-icon" style="border-color: {{cssVars['--theme-primary']}}20; border-top-color: {{cssVars['--theme-primary']}};" />
+    <text class="loading-text" style="color: {{cssVars['--theme-text-secondary']}};">加载中...</text>
+  </view>
+
+  <!-- 内容区域 -->
+  <scroll-view wx:else class="content" scroll-y>
+    <!-- 图文集信息 -->
+    <view class="album-info" style="background: linear-gradient(135deg, {{cssVars['--theme-surface']}} 0%, {{cssVars['--theme-primary']}}08 100%);">
+      <view class="album-meta">
+        <view class="template-badge" style="background: {{templateColor}}20; color: {{templateColor}};">
+          {{templateName}}
+        </view>
+        <text class="diary-count" style="color: {{cssVars['--theme-text-secondary']}};">
+          {{album.diaries.length}} 篇日记
+        </text>
+      </view>
+      <text class="album-description" style="color: {{cssVars['--theme-text-secondary']}};">
+        {{album.description || '暂无描述'}}
+      </text>
+      <view class="album-date" style="color: {{cssVars['--theme-text-secondary']}};">
+        <svg class="date-icon" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="16" y1="2" x2="16" y2="6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="8" y1="2" x2="8" y2="6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="3" y1="10" x2="21" y2="10" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <text>创建于 {{album.createdAt}}</text>
+      </view>
+    </view>
+
+    <!-- 日记列表 - 不同模板样式 -->
+    <view class="diaries-container template-{{album.template}}">
+      <!-- 经典网格模板 -->
+      <view wx:if="{{album.template === 'classic'}}" class="template-classic">
+        <view
+          wx:for="{{album.diaries}}"
+          wx:key="_id"
+          class="diary-item-classic"
+          bindtap="onDiaryTap"
+          data-id="{{item._id}}"
+          style="background: {{cssVars['--theme-surface']}};"
+        >
+          <image wx:if="{{item.images && item.images.length > 0}}" class="diary-image" src="{{item.images[0]}}" mode="aspectFill" />
+          <view class="diary-content">
+            <text class="diary-title">{{item.title}}</text>
+            <text class="diary-excerpt" style="color: {{cssVars['--theme-text-secondary']}};">{{item.content}}</text>
+            <view class="diary-tags">
+              <text
+                wx:for="{{item.tags}}"
+                wx:for-item="tag"
+                wx:for-index="tagIdx"
+                wx:key="tagIdx"
+                class="tag"
+                style="background: {{cssVars['--theme-primary']}}15; color: {{cssVars['--theme-primary']}};"
+              >
+                #{{tag}}
+              </text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 杂志风格模板 -->
+      <view wx:elif="{{album.template === 'magazine'}}" class="template-magazine">
+        <view
+          wx:for="{{album.diaries}}"
+          wx:key="_id"
+          class="diary-item-magazine"
+          bindtap="onDiaryTap"
+          data-id="{{item._id}}"
+        >
+          <image wx:if="{{item.images && item.images.length > 0}}" class="magazine-cover" src="{{item.images[0]}}" mode="aspectFill" />
+          <view class="magazine-overlay"></view>
+          <view class="magazine-content">
+            <text class="magazine-title">{{item.title}}</text>
+            <text class="magazine-date" style="color: rgba(255,255,255,0.8);">{{item.createdAt}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 时间线模板 -->
+      <view wx:elif="{{album.template === 'timeline'}}" class="template-timeline">
+        <view
+          wx:for="{{album.diaries}}"
+          wx:key="_id"
+          class="timeline-item"
+        >
+          <view class="timeline-dot" style="background: {{cssVars['--theme-primary']}};"></view>
+          <view class="timeline-content" style="background: {{cssVars['--theme-surface']}};" bindtap="onDiaryTap" data-id="{{item._id}}">
+            <text class="timeline-date" style="color: {{cssVars['--theme-primary']}};">{{item.createdAt}}</text>
+            <text class="timeline-title">{{item.title}}</text>
+            <text class="timeline-excerpt" style="color: {{cssVars['--theme-text-secondary']}};">{{item.content}}</text>
+            <view wx:if="{{item.images && item.images.length > 0}}" class="timeline-images">
+              <image
+                wx:for="{{item.images}}"
+                wx:for-item="img"
+                wx:for-index="imgIdx"
+                wx:key="imgIdx"
+                wx:if="{{imgIdx < 3}}"
+                class="timeline-image"
+                src="{{img}}"
+                mode="aspectFill"
+              />
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 极简主义模板 -->
+      <view wx:elif="{{album.template === 'minimal'}}" class="template-minimal">
+        <view
+          wx:for="{{album.diaries}}"
+          wx:key="_id"
+          class="diary-item-minimal"
+          bindtap="onDiaryTap"
+          data-id="{{item._id}}"
+        >
+          <text class="minimal-date" style="color: {{cssVars['--theme-text-secondary']}};">{{item.createdAt}}</text>
+          <text class="minimal-title" style="color: {{cssVars['--theme-text-primary']}};">{{item.title}}</text>
+          <text class="minimal-content" style="color: {{cssVars['--theme-text-secondary']}};">{{item.content}}</text>
+          <image wx:if="{{item.images && item.images.length > 0}}" class="minimal-image" src="{{item.images[0]}}" mode="aspectFill" />
+        </view>
+      </view>
+
+      <!-- 拼贴画册模板 -->
+      <view wx:elif="{{album.template === 'collage'}}" class="template-collage">
+        <view
+          wx:for="{{album.diaries}}"
+          wx:key="_id"
+          class="collage-item"
+          bindtap="onDiaryTap"
+          data-id="{{item._id}}"
+          style="background: {{cssVars['--theme-surface']}};"
+        >
+          <view wx:if="{{item.images && item.images.length > 0}}" class="collage-images">
+            <image
+              wx:for="{{item.images}}"
+              wx:for-item="img"
+              wx:for-index="imgIdx"
+              wx:key="imgIdx"
+              wx:if="{{imgIdx < 4}}"
+              class="collage-image"
+              src="{{img}}"
+              mode="aspectFill"
+            />
+          </view>
+          <text class="collage-title">{{item.title}}</text>
+        </view>
+      </view>
+
+      <!-- 宝丽来相册模板 -->
+      <view wx:else class="template-polaroid">
+        <view
+          wx:for="{{album.diaries}}"
+          wx:key="_id"
+          class="polaroid-item"
+          bindtap="onDiaryTap"
+          data-id="{{item._id}}"
+          style="background: {{cssVars['--theme-surface']}};"
+        >
+          <view class="polaroid-frame">
+            <image wx:if="{{item.images && item.images.length > 0}}" class="polaroid-image" src="{{item.images[0]}}" mode="aspectFill" />
+            <view class="polaroid-caption">
+              <text class="polaroid-title">{{item.title}}</text>
+              <text class="polaroid-date" style="color: {{cssVars['--theme-text-secondary']}};">{{item.createdAt}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部占位 -->
+    <view class="bottom-placeholder"></view>
+  </scroll-view>
+
+  <!-- 底部操作栏 -->
+  <view wx:if="{{!loading}}" class="action-bar" style="background: rgba(255, 255, 255, 0.95);">
+    <button class="action-btn secondary" bindtap="onEdit" style="border-color: {{cssVars['--theme-border']}}; color: {{cssVars['--theme-text-primary']}};">
+      编辑
+    </button>
+    <button class="action-btn primary" bindtap="onExport" style="background: {{cssVars['--theme-primary']}};">
+      导出图片
+    </button>
+  </view>
+</view>

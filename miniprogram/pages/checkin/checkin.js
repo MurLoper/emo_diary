@@ -22,15 +22,14 @@ Page({
       { days: 88, points: 0, label: '连续88天', coins: 88 },
       { days: 100, points: 500, label: '连续100天', coins: 0 }
     ],
-    // 图标配置
-    icons: {
-      gift: iconConfig.getIconPath('gift', 'accent'),
-      trendingUp: iconConfig.getIconPath('trending-up', 'primary'),
-      sparkles: iconConfig.getIconPath('sparkles', 'accent'),
-    }
+    // 图标路径配置 - 将在 onLoad 中动态加载
+    icons: {}
   },
 
   onLoad(options) {
+    // 加载主题图标
+    this.loadIcons();
+
     // 应用主题
     this.applyTheme();
 
@@ -42,14 +41,41 @@ Page({
   },
 
   onShow() {
+    // 加载主题图标
+    this.loadIcons();
+
     // 应用主题
     this.applyTheme();
+  },
+
+  /**
+   * 加载主题图标
+   */
+  loadIcons() {
+    // 获取当前主题ID（从主题对象中提取ID，或使用默认值）
+    const currentThemeId = app.globalData.currentTheme?.id ||
+                          wx.getStorageSync('currentThemeId') ||
+                          'pink-girl';
+
+    console.log('[checkin] 加载图标，当前主题ID:', currentThemeId);
+
+    // 手动获取每个图标路径并使用驼峰命名
+    this.setData({
+      icons: {
+        gift: iconConfig.getThemeIconPath('gift', currentThemeId, 'accent'),
+        trendingUp: iconConfig.getThemeIconPath('trending-up', currentThemeId, 'primary'),
+        sparkles: iconConfig.getThemeIconPath('sparkles', currentThemeId, 'accent')
+      }
+    });
+
+    console.log('[checkin] 图标加载完成:', this.data.icons);
   },
 
   /**
    * 主题切换回调
    */
   onThemeChange(theme) {
+    this.loadIcons(); // 重新加载图标
     this.applyTheme();
   },
 

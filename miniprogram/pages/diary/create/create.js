@@ -20,6 +20,12 @@ Page({
     canSave: false,
     aiPolishing: false,
     saving: false,
+    // 拖拽相关
+    dragIndex: -1,
+    dragOverIndex: -1,
+    touchStartX: 0,
+    touchStartY: 0,
+    isDragging: false,
     // 图标配置
     icons: {
       save: iconConfig.getIconPath('save', 'white'),
@@ -177,6 +183,107 @@ Page({
 
     this.setData({ images });
     this.saveDraft();
+  },
+
+  /**
+   * 图片长按开始拖拽
+   */
+  onImageLongPress(e) {
+    if (this.data.images.length <= 1) {
+      return;
+    }
+
+    const index = e.currentTarget.dataset.index;
+
+    this.setData({
+      dragIndex: index,
+      isDragging: true,
+      touchStartX: e.touches[0].clientX,
+      touchStartY: e.touches[0].clientY
+    });
+
+    // 震动反馈
+    wx.vibrateShort({ type: 'light' });
+  },
+
+  /**
+   * 图片拖拽移动
+   */
+  onImageTouchMove(e) {
+    if (!this.data.isDragging || this.data.dragIndex === -1) {
+      return;
+    }
+
+    const touch = e.touches[0];
+
+    // 获取所有图片项的位置信息
+    const query = wx.createSelectorQuery();
+    query.selectAll('.image-item').boundingClientRect();
+    query.exec((res) => {
+      if (!res || !res[0]) return;
+
+      const rects = res[0];
+      let targetIndex = -1;
+
+      // 判断当前触摸位置在哪个图片项上
+      for (let i = 0; i < rects.length; i++) {
+        const rect = rects[i];
+        if (
+          touch.clientX >= rect.left &&
+          touch.clientX <= rect.right &&
+          touch.clientY >= rect.top &&
+          touch.clientY <= rect.bottom
+        ) {
+          targetIndex = i;
+          break;
+        }
+      }
+
+      if (targetIndex !== -1 && targetIndex !== this.data.dragOverIndex) {
+        this.setData({ dragOverIndex: targetIndex });
+      }
+    });
+  },
+
+  /**
+   * 图片拖拽结束
+   */
+  onImageTouchEnd() {
+    const { dragIndex, dragOverIndex, images, isDragging } = this.data;
+
+    if (!isDragging || dragIndex === -1) {
+      this.setData({
+        dragIndex: -1,
+        dragOverIndex: -1,
+        isDragging: false
+      });
+      return;
+    }
+
+    // 如果有有效的目标位置且不是原位置，进行交换
+    if (dragOverIndex !== -1 && dragIndex !== dragOverIndex) {
+      const newImages = [...images];
+      const [movedImage] = newImages.splice(dragIndex, 1);
+      newImages.splice(dragOverIndex, 0, movedImage);
+
+      this.setData({
+        images: newImages,
+        dragIndex: -1,
+        dragOverIndex: -1,
+        isDragging: false
+      });
+
+      this.saveDraft();
+
+      // 震动反馈
+      wx.vibrateShort({ type: 'light' });
+    } else {
+      this.setData({
+        dragIndex: -1,
+        dragOverIndex: -1,
+        isDragging: false
+      });
+    }
   },
 
   /**

@@ -62,59 +62,65 @@
 }
 
 .user-card {
-  padding: 48rpx;
-  border-radius: 32rpx;
+  padding: 32rpx;
+  border-radius: 24rpx;
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 32rpx;
+  gap: 24rpx;
 }
 
 .avatar-wrapper {
   position: relative;
+  flex-shrink: 0;
 }
 
 .avatar {
-  width: 160rpx;
-  height: 160rpx;
-  border-radius: 80rpx;
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 56rpx;
 }
 
 .level-badge {
   position: absolute;
-  bottom: -8rpx;
-  right: -8rpx;
-  padding: 8rpx 16rpx;
-  border-radius: 24rpx;
-  font-size: 24rpx;
+  bottom: -6rpx;
+  right: -6rpx;
+  padding: 6rpx 12rpx;
+  border-radius: 20rpx;
+  font-size: 20rpx;
   color: #FFFFFF;
 }
 
 .user-details {
   flex: 1;
+  min-width: 0;
 }
 
 .user-name {
-  font-size: 40rpx;
+  font-size: 36rpx;
   font-weight: bold;
-  margin-bottom: 8rpx;
+  margin-bottom: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .user-join {
-  font-size: 28rpx;
+  font-size: 24rpx;
 }
 
 .edit-button {
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 40rpx;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 36rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s;
+  flex-shrink: 0;
 }
 
 .edit-button:active {
@@ -179,8 +185,11 @@
 }
 
 .arrow {
-  font-size: 48rpx;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40rpx;
+  height: 40rpx;
 }
 
 .divider {

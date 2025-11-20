@@ -9,8 +9,7 @@ const ThemeSchema = new Schema({
   id: {
     type: String,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   name: { type: String, required: true },
   nameEn: String,

@@ -9,8 +9,7 @@ const UserSchema = new Schema({
   openid: {
     type: String,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   unionid: String,
   nickname: { type: String, default: '日记用户' },

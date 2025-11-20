@@ -1,11 +1,5 @@
 <!--pages/index/index.wxml-->
 <scroll-view class="container" scroll-y style="background: {{cssVars['--theme-background']}};">
-  <!-- 头部 -->
-  <view class="header" style="background: {{cssVars['--theme-surface']}};">
-    <view class="header-title">心晴日记</view>
-    <view class="header-subtitle" style="color: {{cssVars['--theme-text-secondary']}};">记录生活，感受美好</view>
-  </view>
-
   <!-- Banner轮播 -->
   <view class="banner-section">
     <swiper class="banner-swiper" indicator-dots="{{true}}" indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#FFFFFF" autoplay="{{true}}" interval="{{5000}}" circular="{{true}}" bindchange="onBannerChange">
@@ -37,7 +31,11 @@
           <view class="theme-entry-desc" style="color: {{cssVars['--theme-text-secondary']}};">主题商店 · 解锁更多精美主题</view>
         </view>
       </view>
-      <text class="arrow-icon" style="color: {{cssVars['--theme-text-secondary']}};">→</text>
+      <view class="arrow-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 18l6-6-6-6" stroke="{{cssVars['--theme-text-secondary']}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </view>
     </view>
   </view>
 

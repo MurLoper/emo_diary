@@ -25,19 +25,16 @@
 }
 
 .back-button {
-  padding: 8rpx 0;
+  padding: 8rpx;
   margin-left: -8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.2s;
 }
 
 .back-button:active {
   transform: scale(0.9);
-}
-
-.back-icon {
-  font-size: 56rpx;
-  line-height: 1;
-  font-weight: bold;
 }
 
 .header-text {
